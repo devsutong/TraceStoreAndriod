@@ -5,10 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sutonglabs.tracestore.common.CartProductState
-import com.sutonglabs.tracestore.common.ProductState
 import com.sutonglabs.tracestore.common.Resource
 import com.sutonglabs.tracestore.use_case.GetCartUseCase
-import com.sutonglabs.tracestore.use_case.GetProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

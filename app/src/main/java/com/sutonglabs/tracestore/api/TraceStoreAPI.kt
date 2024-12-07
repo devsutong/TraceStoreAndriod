@@ -3,7 +3,6 @@ package com.sutonglabs.tracestore.api
 import com.sutonglabs.tracestore.models.AddToCartRequest
 import com.sutonglabs.tracestore.models.CartResponse
 import com.sutonglabs.tracestore.models.ProductResponse
-import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.models.ProductDetailResponse
 import retrofit2.Response
 import retrofit2.Call
