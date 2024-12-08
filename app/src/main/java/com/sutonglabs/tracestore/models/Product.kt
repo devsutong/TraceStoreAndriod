@@ -15,5 +15,8 @@ data class ProductResponse(
     val status: Boolean = false,
     val data: List<Product> = emptyList()
 )
-
+data class ProductDetailResponse(
+    val status: Boolean = false,
+    val data: Product? = null  // Single product for ProductDetail
+)
 
