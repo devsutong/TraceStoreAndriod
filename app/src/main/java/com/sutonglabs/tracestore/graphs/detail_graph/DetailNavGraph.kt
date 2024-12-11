@@ -6,7 +6,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.sutonglabs.tracestore.common.Constrains
 import com.sutonglabs.tracestore.graphs.Graph
 import com.sutonglabs.tracestore.ui.cart_screen.CartScreen
 import com.sutonglabs.tracestore.ui.notification_screen.NotificationScreen
@@ -15,6 +14,7 @@ import com.sutonglabs.tracestore.viewmodels.ProductDetailViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 
 @Composable
 fun CartScreenWithContext(onItemClick: (Int, String, Context) -> Unit) {
@@ -23,7 +23,7 @@ fun CartScreenWithContext(onItemClick: (Int, String, Context) -> Unit) {
     val token = sharedPreferences.getString("TOKEN_KEY", "") ?: ""
 
     // Pass productId, token, and context together when navigating
-    CartScreen(onItemClick = { productId ->
+    CartScreen(navController = NavController(context), onItemClick = { productId ->
         onItemClick(productId, token, context)
     })
 }

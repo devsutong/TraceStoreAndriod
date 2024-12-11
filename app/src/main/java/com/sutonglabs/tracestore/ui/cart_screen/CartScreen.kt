@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.sutonglabs.tracestore.common.Constants
 import com.sutonglabs.tracestore.models.CartProduct
@@ -36,7 +37,8 @@ import com.sutonglabs.tracestore.viewmodels.CartViewModel
 @Composable
 fun CartScreen(
     cartViewModel: CartViewModel = hiltViewModel(),
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
+    navController: NavController
 ) {
     val state = cartViewModel.state.value
 
