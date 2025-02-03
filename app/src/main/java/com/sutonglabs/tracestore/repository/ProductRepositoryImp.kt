@@ -7,6 +7,7 @@ import com.sutonglabs.tracestore.data.getJwtToken
 import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.models.ProductResponse
 import com.sutonglabs.tracestore.models.ImageUploadResponse
+import com.sutonglabs.tracestore.models.ProductCreate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -53,17 +54,22 @@ class ProductRepositoryImp @Inject constructor(
         return null
     }
 
-    override suspend fun addProduct(product: Product): Product? {
-        try {
-            val response = traceStoreApiService.addProduct(product)
+    override suspend fun addProduct(product: ProductCreate, context: Context): Product? {
+        val token = getJwtToken(context).first()  // Fetch JWT token
+        return try {
+            val response = traceStoreApiService.addProduct("Bearer $token", product)  // Include the token in the header
             if (response.isSuccessful) {
-                return response.body()
+                response.body()
+            } else {
+                Log.e("ProductRepository", "Error adding product: ${response.errorBody()?.string()}")
+                null
             }
         } catch (e: Exception) {
             Log.e("ProductRepository", "Error adding product: ${e.localizedMessage}")
+            null
         }
-        return null
     }
+
 
     // Upload Image method
     override suspend fun uploadImage(image: MultipartBody.Part): ImageUploadResponse? {

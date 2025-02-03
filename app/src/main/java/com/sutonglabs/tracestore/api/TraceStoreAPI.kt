@@ -54,7 +54,10 @@ interface TraceStoreAPI {
     ): Response<CartResponse>
 
     @POST("product/")
-    suspend fun addProduct(@Body product: Product): Response<Product>
+    suspend fun addProduct(
+        @Header("Authorization") authHeader: String,  // Add Authorization header
+        @Body product: ProductCreate
+    ): Response<Product>
 
     @Multipart
     @POST("upload/image")

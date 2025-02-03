@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.viewmodels.AddProductViewModel
 import com.sutonglabs.tracestore.viewmodels.AddProductViewModelFactory
 import com.sutonglabs.tracestore.repository.ProductRepository
@@ -27,6 +26,7 @@ import com.sutonglabs.tracestore.models.Category
 import okhttp3.RequestBody.Companion.asRequestBody
 import androidx.compose.ui.unit.dp  // Import for dp
 import androidx.compose.material3.MaterialTheme // Import for typography
+import com.sutonglabs.tracestore.models.ProductCreate
 
 @Composable
 fun AddProductScreen(
@@ -172,7 +172,7 @@ fun AddProductScreen(
                         val imageUrl = imageResponse.path // Adjust according to your actual response
 
                         // Create the product object with the image URL
-                        val product = Product(
+                        val product =  ProductCreate(
                             name = productName.text,
                             description = productDescription.text,
                             price = productPrice.text.toIntOrNull() ?: 0,
@@ -184,7 +184,7 @@ fun AddProductScreen(
                         Log.d("AddProductScreen", "Product payload with image: $product")
 
                         // Call the method to upload the product and image
-                        addProductViewModel.addProduct(product)
+                        addProductViewModel.addProduct(product,context)
                     } ?: run {
                         Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show()
                     }
