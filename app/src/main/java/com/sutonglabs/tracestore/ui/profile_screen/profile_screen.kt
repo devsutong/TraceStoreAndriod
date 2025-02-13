@@ -1,73 +1,99 @@
 package com.sutonglabs.tracestore.ui.profile_screen
 
-import android.content.Context
-import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sutonglabs.tracestore.data.decodeJwt
-import com.sutonglabs.tracestore.data.getJwtToken
-import kotlinx.coroutines.flow.Flow
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.sutonglabs.tracestore.viewmodels.UserViewModel
 
 @Composable
-fun ProfileScreen(context: Context, onBackBtnClick: () -> Unit) {
-    // Retrieve the JWT token as a flow
-    val jwtTokenFlow: Flow<String?> = remember { getJwtToken(context) }
-    val jwtToken = jwtTokenFlow.collectAsState(initial = null).value
+fun ProfileScreen(
+    userViewModel: UserViewModel = hiltViewModel(),
+    onBackBtnClick: () -> Unit
+) {
+    val userInfo by userViewModel.userInfo.collectAsState()
 
-    // Decode the JWT token to extract user info
-    val userInfo = jwtToken?.let { decodeJwt(it) }
-
-    userInfo?.let {
-        val username = it.optString("username") ?: "Unknown User"
-        val email = it.optString("email") ?: "Email not available"
-        Log.d("ProfileScreen", "Username: $username")
-        Log.d("ProfileScreen", "Email: $email")
+    // Get JWT token and fetch user info
+    val jwtToken by userViewModel.jwtToken.collectAsState()
+    LaunchedEffect(jwtToken) {
+        jwtToken?.let {
+            userViewModel.fetchUserInfo(it)
+        }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Icon(
-                imageVector = Icons.Filled.Person,
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(end = 16.dp)
-            )
-            Column {
-                Text(
-                    text = userInfo?.optString("username") ?: "Unknown User",
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = userInfo?.optString("email") ?: "Email not available",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+        // Profile Icon
+        Icon(
+            imageVector = Icons.Filled.Person,
+            contentDescription = "Profile Picture",
+            modifier = Modifier
+                .size(120.dp)
+                .padding(8.dp)
+        )
+
+        // User Info Card
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ProfileDetailRow("Username", userInfo?.username ?: "Unknown User")
+                ProfileDetailRow("Email", userInfo?.email ?: "Not Available")
+                ProfileDetailRow("First Name", userInfo?.firstName ?: "Not Available")
+                ProfileDetailRow("Last Name", userInfo?.lastName ?: "Not Available")
+                ProfileDetailRow("Age", userInfo?.age?.toString() ?: "Not Available")
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onBackBtnClick) {
-            Text("Back")
+
+        // Back Button
+        Button(
+            onClick = onBackBtnClick,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text(text = "Back", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
+    }
+}
+
+// Helper function for displaying profile details in a row format
+@Composable
+fun ProfileDetailRow(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = label, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+        Text(text = value, fontSize = 16.sp)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(
-        context = androidx.compose.ui.platform.LocalContext.current,
-        onBackBtnClick = {}
-    )
+    ProfileScreen(onBackBtnClick = {})
 }

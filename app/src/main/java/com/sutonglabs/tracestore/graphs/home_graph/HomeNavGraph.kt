@@ -20,7 +20,6 @@ import dagger.hilt.android.scopes.ActivityScoped
 
 @Composable
 fun HomeNavGraph(
-    context: Context,
     navHostController: NavHostController,
     productRepository: ProductRepository // Injected here
 ) {
@@ -41,7 +40,7 @@ fun HomeNavGraph(
             ConversationScreen()
         }
         composable(ShopHomeScreen.ProfileScreen.route) {
-            ProfileScreen(context = context) {
+            ProfileScreen {
                 navHostController.popBackStack()
             }
         }

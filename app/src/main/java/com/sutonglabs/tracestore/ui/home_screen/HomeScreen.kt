@@ -58,7 +58,7 @@ fun HomeScreen(context: Context, productRepository: ProductRepository) {
         ) {
             Column {
                 // Pass context and productRepository to HomeNavGraph
-                HomeNavGraph(navHostController = navController, context = context, productRepository = productRepository)
+                HomeNavGraph(navHostController = navController, productRepository = productRepository)
             }
         }
     }

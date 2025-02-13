@@ -17,3 +17,8 @@ data class LoginUser(
     val username: String = "",
     val password: String = ""
 )
+
+data class UserResponse(
+    val status: Boolean,
+    val data: User
+)

@@ -33,7 +33,7 @@ interface TraceStoreAPI {
     ): Response<ProductDetailResponse>
 
     @GET("user")
-    suspend fun getUserInfo(@Header("Authorization") token: String): Response<User>
+    suspend fun getUserInfo(@Header("Authorization") token: String): Response<UserResponse>
 
     @POST("user/update")
     suspend fun updateUser(@Body user: User, @Header("Authorization") token: String): Response<User>

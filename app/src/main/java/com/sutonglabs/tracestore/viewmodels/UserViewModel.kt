@@ -13,38 +13,54 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-open class UserViewModel @Inject constructor(
+class UserViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    private val _userInfo = MutableStateFlow<User?>(null)
+    val userInfo: StateFlow<User?> = _userInfo
+
     private val _loginState = MutableStateFlow<Result<String>?>(null)
     private val _registerState = MutableStateFlow<Result<String>?>(null)
+    private val _updateState = MutableStateFlow<Result<User>?>(null)
+    private val _deleteState = MutableStateFlow<Result<Unit>?>(null)
+
     val loginState: StateFlow<Result<String>?> = _loginState
     val registerState: StateFlow<Result<String>?> = _registerState
-    private val _updateState = MutableStateFlow<Result<User>?>(null)
     val updateState: StateFlow<Result<User>?> = _updateState
-
-    private val _deleteState = MutableStateFlow<Result<Unit>?>(null)
     val deleteState: StateFlow<Result<Unit>?> = _deleteState
+
+    val jwtToken: StateFlow<String?> = userRepository.jwtToken
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    fun fetchUserInfo(token: String) {
+        viewModelScope.launch {
+            val result = userRepository.getUserInfo(token)
+            result.onSuccess { user ->
+                _userInfo.value = user
+            }.onFailure {
+                _userInfo.value = null
+            }
+        }
+    }
+
     fun login(username: String, password: String) {
         viewModelScope.launch {
             _loginState.value = userRepository.login(username, password)
         }
     }
-    fun register(username: String,
-                 email: String,
-                 firstName: String,
-                 lastName: String,
-                 age: String,
-                 GSTIN: String,
-                 password: String) {
+
+    fun register(
+        username: String,
+        email: String,
+        firstName: String,
+        lastName: String,
+        age: String,
+        GSTIN: String,
+        password: String
+    ) {
         viewModelScope.launch {
             _registerState.value = userRepository.register(username, email, firstName, lastName, age, GSTIN, password)
         }
     }
-
-
-
-    val jwtToken: StateFlow<String?> = userRepository.jwtToken
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 }
