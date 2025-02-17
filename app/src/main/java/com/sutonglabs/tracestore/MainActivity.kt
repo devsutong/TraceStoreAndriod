@@ -12,49 +12,33 @@ import com.sutonglabs.tracestore.graphs.root_graph.RootNavigationGraph
 import com.sutonglabs.tracestore.ui.theme.TraceStoreTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.sutonglabs.tracestore.repository.ProductRepository
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @Inject
     lateinit var apiService: TraceStoreAPI
+
+    @Inject
+    lateinit var productRepository: ProductRepository // Inject ProductRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TraceStoreTheme {
-                ShowScreen(LocalContext.current)
+                ShowScreen(context = this)
             }
         }
     }
+
     @Composable
     private fun ShowScreen(context: Context) {
         val navHostController = rememberNavController()
-//        val viewModelStoreOwner = remember { this as ViewModelStoreOwner }
-//
-//        LaunchedEffect(Unit) {
-//            navHostController.setViewModelStore(viewModelStoreOwner.viewModelStore)
-//        }
-        RootNavigationGraph(navHostController = navHostController, context = context)
+        RootNavigationGraph(
+            navHostController = navHostController,
+            context = context,
+            productRepository = productRepository // Pass productRepository
+        )
     }
 }
-
-
-    //    private  fun fetchProducts() {
-//        val call = apiService.getProducts()
-//
-//        call.enqueue(object : Callback<ProductResponse> {
-//            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
-//                if (response.isSuccessful) {
-//                    val products = response.body()?.data
-//                    products?.forEach {
-//                        Log.d("MainActivity", "Product: ${it.name}, Price: ${it.price}")
-//                    }
-//                } else {
-//                    Log.e("MainActivity", "Response failed with status: ${response.code()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-//                Log.e("MainActivity", "Network request failed: ${t.message}")
-//            }
-//        })
-//    }

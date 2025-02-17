@@ -13,8 +13,6 @@ import com.sutonglabs.tracestore.common.Resource
 import com.sutonglabs.tracestore.repository.CartRepository
 import com.sutonglabs.tracestore.use_case.GetProductDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject

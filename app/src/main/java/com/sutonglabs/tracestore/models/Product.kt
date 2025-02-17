@@ -4,12 +4,12 @@ data class Product(
     val id: Int = 0,
     val name: String = "",
     val description: String = "",
-    val image: String = "",
+    var image: String = "",
     val price: Int = 0,
-    val priceUnit: String = "",
-    val createdAt: String = "",
-    val updatedAt: String = ""
+    val priceUnit: String = "inr", // Price unit like USD, INR, etc.
+    val categoryIds: List<Int> = emptyList() // List of category IDs
 )
+
 
 data class ProductResponse(
     val status: Boolean = false,

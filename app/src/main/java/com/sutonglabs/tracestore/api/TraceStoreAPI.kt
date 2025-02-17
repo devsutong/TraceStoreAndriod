@@ -1,5 +1,7 @@
 package com.sutonglabs.tracestore.api
 
+import com.sutonglabs.tracestore.models.*
+import okhttp3.MultipartBody
 import android.util.Log
 import com.sutonglabs.tracestore.api.request_models.CreateAddressRequest
 import com.sutonglabs.tracestore.api.request_models.CreateOrderRequest
@@ -17,10 +19,13 @@ import kotlinx.coroutines.flow.first
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -46,6 +51,15 @@ interface TraceStoreAPI {
         @Path("id") id: Int,
         @Header("Authorization") authHeader: String
     ): Response<ProductDetailResponse>
+
+    @GET("user")
+    suspend fun getUserInfo(@Header("Authorization") token: String): Response<UserResponse>
+
+    @POST("user/update")
+    suspend fun updateUser(@Body user: User, @Header("Authorization") token: String): Response<User>
+
+    @DELETE("user/{id}")
+    suspend fun deleteUser(@Path("id") id: Int, @Header("Authorization") token: String): Response<Unit>
 
     @GET("cart")
     fun getCart(@Header("Authorization") token: String): Call<CartResponse>
@@ -82,4 +96,15 @@ interface TraceStoreAPI {
         @Header("Authorization") token: String,
         @Body request: UpdateCartRequest
     ): Response<CartResponse>
+
+    @POST("product/")
+    suspend fun addProduct(
+        @Header("Authorization") authHeader: String,  // Add Authorization header
+        @Body product: ProductCreate
+    ): Response<Product>
+
+    @Multipart
+    @POST("upload/image")
+    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<ImageUploadResponse>
 }
+

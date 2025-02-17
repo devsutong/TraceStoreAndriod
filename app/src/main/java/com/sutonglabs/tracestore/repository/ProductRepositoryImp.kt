@@ -6,9 +6,12 @@ import com.sutonglabs.tracestore.api.TraceStoreAPI
 import com.sutonglabs.tracestore.data.getJwtToken
 import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.models.ProductResponse
+import com.sutonglabs.tracestore.models.ImageUploadResponse
+import com.sutonglabs.tracestore.models.ProductCreate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -41,7 +44,7 @@ class ProductRepositoryImp @Inject constructor(
             val response = traceStoreApiService.getProductDetail(id, "Bearer $token")
             if (response.isSuccessful) {
                 val productDetailResponse = response.body()
-                return productDetailResponse?.data  // Return the single product from the response
+                return productDetailResponse?.data
             } else {
                 Log.e("ProductRepository", "Error fetching product detail: ${response.errorBody()?.string()}")
             }
@@ -50,4 +53,35 @@ class ProductRepositoryImp @Inject constructor(
         }
         return null
     }
+
+    override suspend fun addProduct(product: ProductCreate, context: Context): Product? {
+        val token = getJwtToken(context).first()  // Fetch JWT token
+        return try {
+            val response = traceStoreApiService.addProduct("Bearer $token", product)  // Include the token in the header
+            if (response.isSuccessful) {
+                response.body()
+            } else {
+                Log.e("ProductRepository", "Error adding product: ${response.errorBody()?.string()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("ProductRepository", "Error adding product: ${e.localizedMessage}")
+            null
+        }
+    }
+
+
+    // Upload Image method
+    override suspend fun uploadImage(image: MultipartBody.Part): ImageUploadResponse? {
+        try {
+            val response = traceStoreApiService.uploadImage(image)
+            if (response.isSuccessful) {
+                return response.body()
+            }
+        } catch (e: Exception) {
+            Log.e("ProductRepository", "Error uploading image: ${e.localizedMessage}")
+        }
+        return null
+    }
 }
+
