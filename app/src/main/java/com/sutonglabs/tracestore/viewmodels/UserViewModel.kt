@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sutonglabs.tracestore.models.User
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sutonglabs.tracestore.api.User
+//import com.sutonglabs.tracestore.api.User
 import com.sutonglabs.tracestore.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

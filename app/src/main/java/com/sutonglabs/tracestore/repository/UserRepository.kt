@@ -7,7 +7,7 @@ import com.sutonglabs.tracestore.api.LoginRequest
 import com.sutonglabs.tracestore.api.RegisterRequest
 import com.sutonglabs.tracestore.api.TraceStoreAPI
 import com.sutonglabs.tracestore.models.User
-import com.sutonglabs.tracestore.api.User
+//import com.sutonglabs.tracestore.api.User
 import com.sutonglabs.tracestore.data.getJwtToken
 import com.sutonglabs.tracestore.data.saveJwtToken
 import kotlinx.coroutines.flow.Flow
