@@ -14,14 +14,13 @@ import com.sutonglabs.tracestore.ui.conversation_screen.ConversationScreen
 import com.sutonglabs.tracestore.ui.dashboard_screen.DashboardScreen
 import com.sutonglabs.tracestore.ui.favourite_screen.FavouriteScreen
 import com.sutonglabs.tracestore.ui.profile_screen.ProfileScreen
+import com.sutonglabs.tracestore.ui.order_screen.OrderScreen // Import your OrdersScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
-import androidx.hilt.navigation.compose.hiltViewModel
-import dagger.hilt.android.scopes.ActivityScoped
 
 @Composable
 fun HomeNavGraph(
     navHostController: NavHostController,
-    productRepository: ProductRepository // Injected here
+    productRepository: ProductRepository
 ) {
     NavHost(
         navController = navHostController,
@@ -45,12 +44,16 @@ fun HomeNavGraph(
             }
         }
 
-        // Pass navHostController and productRepository to AddProductScreen
+        composable(ShopHomeScreen.OrderScreen.route) {
+            OrderScreen()
+        }
+
+
         composable("add_product_screen") {
             AddProductScreen(navHostController = navHostController, productRepository = productRepository)
         }
 
-        // detail graph
+        // detail and cart graphs
         detailNavGraph(navController = navHostController)
         cartNavGraph(navController = navHostController)
     }

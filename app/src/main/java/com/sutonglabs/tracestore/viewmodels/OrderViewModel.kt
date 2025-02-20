@@ -7,48 +7,56 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sutonglabs.tracestore.api.request_models.CreateAddressRequest
 import com.sutonglabs.tracestore.api.request_models.CreateOrderRequest
+import com.sutonglabs.tracestore.models.Order
 import com.sutonglabs.tracestore.repository.OrderRepository
-import com.sutonglabs.tracestore.viewmodels.state.AddressState
 import com.sutonglabs.tracestore.viewmodels.state.CreateOrderState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OrderViewModel @Inject constructor(
     private val orderRepository: OrderRepository
-): ViewModel() {
+) : ViewModel() {
+
+    private val _orders = MutableStateFlow<List<Order>>(emptyList())
+    val orders: StateFlow<List<Order>> = _orders
 
     private val _state = mutableStateOf(CreateOrderState())
     val state: State<CreateOrderState> = _state
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     fun createOrder(orderRequest: CreateOrderRequest, context: Context) {
         viewModelScope.launch {
+            _state.value = CreateOrderState(isLoading = true)
             try {
                 orderRepository.createOrder(context, orderRequest)
+                _state.value = CreateOrderState(isSuccess = true)
                 Log.d("OrderViewModel", "Order created successfully")
-
-                // Show Toast after successfully adding the product
-                Toast.makeText(context, "Order Created!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Log.e("OrderViewModel", "Error creating Order: ${e.message}")
+                _state.value = CreateOrderState(errorMessage = e.message ?: "Unknown error")
+
+                Log.e("OrderViewModel", "Error creating order: ${e.message}")
             }
         }
     }
 
-    fun addressOrder(orderRequest: CreateOrderRequest, context: Context) {
+    fun fetchOrders(context: Context) {
         viewModelScope.launch {
             try {
-                orderRepository.createOrder(context, orderRequest)
-                Log.d("OrderViewModel", "Order created successfully")
-
-                // Show Toast after successfully adding the product
-                Toast.makeText(context, "Order Created!", Toast.LENGTH_SHORT).show()
+                val response = orderRepository.getOrders(context)
+                _orders.value = response
+                Log.d("OrderViewModel", "Orders fetched successfully: ${response.size} orders")
             } catch (e: Exception) {
-                Log.e("OrderViewModel", "Error creating Order: ${e.message}")
+                _errorMessage.value = e.message
+                Log.e("OrderViewModel", "Error fetching orders: ${e.message}")
             }
         }
     }
 }
+

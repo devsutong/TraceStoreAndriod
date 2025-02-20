@@ -33,7 +33,9 @@ fun NavigationBar(
     val navItemList = listOf(
         BottomNavItem.ProfileNav,
         BottomNavItem.HomeNav,
+        BottomNavItem.OrdersNav // Add Orders to bottom navigation
     )
+
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var bottomNavVisibility by remember { mutableStateOf<Boolean>(true) }

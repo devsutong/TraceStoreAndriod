@@ -28,6 +28,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 data class LoginRequest(val username: String, val password: String)
 data class RegisterRequest(val username: String, val email: String, val firstName: String, val lastName: String, val age: String, val GSTIN: String, val password: String)
@@ -90,6 +91,12 @@ interface TraceStoreAPI {
         @Header("Authorization") token: String,
         @Body address: CreateOrderRequest
     ): Response<CreateOrderResponse>
+
+    @GET("order")
+    suspend fun getOrders(
+        @Header("Authorization") token: String
+    ): Response<List<Order>>
+
 
     @PUT("cart/update")
     suspend fun updateCartItem(
