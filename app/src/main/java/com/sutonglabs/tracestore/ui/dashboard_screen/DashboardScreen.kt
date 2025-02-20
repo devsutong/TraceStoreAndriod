@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -37,62 +39,63 @@ fun DashboardScreen(
     recommendedProductState: LazyListState = rememberLazyListState(),
     productViewModel: DashboardViewModel = hiltViewModel(),
     onItemClick: (Int) -> Unit,
-
-){
+) {
     val state = productViewModel.state.value
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(12.dp) // slightly reduced overall padding
+            .verticalScroll(scrollState)
             .heightIn(max = 2048.dp)
     ) {
         Text(
             text = "Popular Products",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(vertical = 8.dp)
+            style = MaterialTheme.typography.titleMedium, // using a slightly smaller text style
+            modifier = Modifier.padding(vertical = 4.dp)
         )
 
         LazyRow(state = popularProductState) {
             state.product?.let { products ->
-                items(products) { product ->
+                items(products.shuffled()) { product ->
                     ProductCard(product, onItemClick)
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
             text = "Recommended for You",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(vertical = 8.dp)
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(vertical = 4.dp)
         )
         LazyRow(state = recommendedProductState) {
             state.product?.let { products ->
-                items(products) { product ->
+                items(products.shuffled()) { product ->
                     ProductCard(product, onItemClick)
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "All Products",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(vertical = 8.dp)
+            text = "More Products",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(vertical = 4.dp)
         )
 
         LazyColumn(state = rememberLazyListState()) {
             state.product?.let { products ->
-                items(products.chunked(2)) { productPair ->
+                items(products.chunked(3)) { productPair ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.Start
                     ) {
                         productPair.forEach { product ->
-                            ProductCard(product, onItemClick)
+                            MoreProductCard(product, onItemClick)
                         }
                     }
                 }
@@ -105,11 +108,11 @@ fun DashboardScreen(
 fun ProductCard(product: Product, onItemClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(4.dp)
             .clickable { onItemClick(product.id) }
-            .width(150.dp)
-            .height(200.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            .width(130.dp) // scaled down width
+            .height(160.dp), // scaled down height
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column {
             Image(
@@ -117,19 +120,55 @@ fun ProductCard(product: Product, onItemClick: (Int) -> Unit) {
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
+                    .height(100.dp), // scaled down image height
                 contentScale = ContentScale.Crop
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = product.name,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                // Optionally scale down font size by copying and modifying the style
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.9f),
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
             Text(
                 text = "${product.price} INR",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                style = MaterialTheme.typography.bodySmall, // using a smaller body style
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun MoreProductCard(product: Product, onItemClick: (Int) -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(4.dp)
+            .clickable { onItemClick(product.id) }
+            .width(125.dp) // scaled down width
+            .height(155.dp), // scaled down height
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Column {
+            Image(
+                painter = rememberImagePainter(Constants.BASE_URL + product.image),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp), // scaled down image height
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = product.name,
+                // Optionally scale down font size by copying and modifying the style
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.9f),
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+            Text(
+                text = "${product.price} INR",
+                style = MaterialTheme.typography.bodySmall, // using a smaller body style
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
     }

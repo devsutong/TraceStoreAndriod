@@ -126,6 +126,7 @@ fun AddAddressScreen(
                             addAddressRequest = addAddressRequest
                         )
                         // Navigate back to the previous screen.
+                        navController.previousBackStackEntry?.savedStateHandle?.set("addressUpdated", true)
                         navController.popBackStack()
                     },
                     modifier = Modifier.fillMaxWidth()

@@ -36,7 +36,7 @@ class AddressViewModel @Inject constructor(
         getAddress()
     }
 
-    private fun getAddress() {
+    fun getAddress() {
         getAddressUseCase().onEach { result ->
             when(result) {
                 is Resource.Loading -> {
@@ -80,7 +80,6 @@ class AddressViewModel @Inject constructor(
             try {
                 addressRepository.updateAddress(context, updatedaddressRequest)
                 Log.d("AddressViewModel", "Address updated successfully")
-
                 // Show Toast after successfully adding the product
                 Toast.makeText(context, "Address Updated!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
@@ -94,7 +93,6 @@ class AddressViewModel @Inject constructor(
             try {
                 addressRepository.createAddress(context, addAddressRequest)
                 Log.d("AddressViewModel", "Address created successfully")
-
                 // Show Toast after successfully adding the product
                 Toast.makeText(context, "Address Created!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {

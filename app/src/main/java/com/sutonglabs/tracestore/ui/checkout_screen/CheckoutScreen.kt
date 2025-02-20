@@ -1,5 +1,7 @@
 package com.sutonglabs.tracestore.ui.checkout_screen
 
+import androidx.compose.runtime.livedata.observeAsState
+
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -19,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -41,8 +44,23 @@ fun CheckoutScreen(
     cartViewModel: CartViewModel = hiltViewModel(),
     context: Context
 ){
-        val addressState = addressViewModel.state.value
-    val orderState = orderViewModel.state.value
+    val addressState = addressViewModel.state.value
+
+    val updatedFlag = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Boolean>("addressUpdated")
+        ?.observeAsState()
+
+    LaunchedEffect(updatedFlag?.value) {
+        updatedFlag?.value?.let { updated ->
+            if (updated) {
+                // Refresh the address state or update UI accordingly
+                addressViewModel.getAddress()
+                // Optionally, clear the flag:
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("addressUpdated")
+            }
+        }
+    }
 
     when {
         addressState.isLoading -> {
