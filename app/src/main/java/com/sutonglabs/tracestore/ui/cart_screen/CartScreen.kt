@@ -47,10 +47,10 @@ fun CartScreen(
     onItemClick: (Int) -> Unit,
     navController: NavController
 ) {
-    val state = cartViewModel.state.value
+    val cartState = cartViewModel.state.value
 
     // Calculate total amount as Double to handle decimal points
-    val totalAmount = state.product?.sumOf { it.product.price * it.quantity }?.toDouble() ?: 0.0
+    val totalAmount = cartState.product?.sumOf { it.product.price * it.quantity }?.toDouble() ?: 0.0
 
     Column(
         modifier = Modifier
@@ -64,34 +64,61 @@ fun CartScreen(
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        // LazyColumn for scrollable content
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(680.dp),
-            state = rememberLazyListState()
-        ) {
-            state.product?.let { products ->
-                items(products) { product ->
-                    ProductCard(product.product,
-                        product.quantity,
-                        onItemClick,
-                        onQuantityChange = { newQuantity ->
-                            cartViewModel.updateCartItem(product.id, newQuantity)
-                        }  )
+        if (cartState.product.isNullOrEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Your cart is empty.",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Button(
+                    onClick = {
+                        // Replace "home" with your target route
+                        navController.navigate("dashboard_screen") {
+                            // Remove this screen from the backstack to prevent returning here
+                            popUpTo("cart_screen") { inclusive = true }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Continue Shopping")
                 }
             }
-        }
+        } else {
 
-        // Checkout Bar (Fixed at the bottom)
-        Checkout(
-            navController = navController,
-            totalAmount = "₹${"%.2f".format(totalAmount)}", // Format totalAmount as a Double
-            onCheckoutClick = { /* Handle checkout click */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-        )
+            // LazyColumn for scrollable content
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(680.dp),
+                state = rememberLazyListState()
+            ) {
+                cartState.product?.let { products ->
+                    items(products) { product ->
+                        ProductCard(product.product,
+                            product.quantity,
+                            onItemClick,
+                            onQuantityChange = { newQuantity ->
+                                cartViewModel.updateCartItem(product.id, newQuantity)
+                            }  )
+                    }
+                }
+            }
+
+            // Checkout Bar (Fixed at the bottom)
+            Checkout(
+                navController = navController,
+                totalAmount = "₹${"%.2f".format(totalAmount)}", // Format totalAmount as a Double
+                onCheckoutClick = { /* Handle checkout click */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            )
+        }
     }
 }
 

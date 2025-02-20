@@ -7,10 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.sutonglabs.tracestore.graphs.Graph
-import com.sutonglabs.tracestore.graphs.cart_graph.CartScreen
-//import com.sutonglabs.tracestore.graphs.cart_graph.CheckoutScreenWithContext
-import com.sutonglabs.tracestore.ui.cart_screen.CartScreen
+import com.sutonglabs.tracestore.ui.add_address.AddAddressScreen
 import com.sutonglabs.tracestore.ui.checkout_screen.CheckoutScreen
+import com.sutonglabs.tracestore.ui.checkout_screen.OrderCreatedScreen
 import com.sutonglabs.tracestore.ui.edit_address.EditAddressScreen
 
 @Composable
@@ -25,6 +24,13 @@ fun EditAddressScreenWithContext(navController: NavHostController) {
     EditAddressScreen(navController = navController, context = context)
 }
 
+@Composable
+fun AddAddressScreenWithContext(navController: NavHostController) {
+    val context = LocalContext.current
+    AddAddressScreen(navController = navController, context = context)
+}
+
+
 
 fun NavGraphBuilder.checkoutNavGraph(navController: NavHostController) {
     navigation(
@@ -36,6 +42,12 @@ fun NavGraphBuilder.checkoutNavGraph(navController: NavHostController) {
         }
         composable(CheckoutScreen.EditAddressScreen.route) {
             EditAddressScreenWithContext(navController = navController)
+        }
+        composable(CheckoutScreen.AddAddressScreen.route) {
+            AddAddressScreenWithContext(navController = navController)
+        }
+        composable(CheckoutScreen.OrderCreatedScreen.route) {
+            OrderCreatedScreen(navController = navController)
         }
     }
 

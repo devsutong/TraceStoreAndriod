@@ -46,10 +46,10 @@ class AddressRepositoryImp @Inject constructor(
         return withContext(Dispatchers.IO) {
             val response = traceStoreApiService.updateAddress("Bearer $token", updatedAddress)
             if (response.isSuccessful && response.body() != null) {
-                Log.d("AddressRepository", "Address created successfully")
+                Log.d("AddressRepository", "Address updated successfully")
                 response.body()!!
             } else {
-                throw Exception("Failed to create Address. ${response.errorBody()?.string()}")
+                throw Exception("Failed to updated Address. ${response.errorBody()?.string()}")
             }
         }
     }

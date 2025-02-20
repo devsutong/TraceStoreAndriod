@@ -79,20 +79,20 @@ class AddressViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 addressRepository.updateAddress(context, updatedaddressRequest)
-                Log.d("AddressViewModel", "Address created successfully")
+                Log.d("AddressViewModel", "Address updated successfully")
 
                 // Show Toast after successfully adding the product
-                Toast.makeText(context, "Address Created!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Address Updated!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Log.e("AddressViewModel", "Error creating address: ${e.message}")
+                Log.e("AddressViewModel", "Error Updating address: ${e.message}")
             }
         }
     }
 
-    fun createAddress(addressRequest: CreateAddressRequest, context: Context) {
+    fun createAddress(addAddressRequest: CreateAddressRequest, context: Context) {
         viewModelScope.launch {
             try {
-                addressRepository.createAddress(context, addressRequest)
+                addressRepository.createAddress(context, addAddressRequest)
                 Log.d("AddressViewModel", "Address created successfully")
 
                 // Show Toast after successfully adding the product
