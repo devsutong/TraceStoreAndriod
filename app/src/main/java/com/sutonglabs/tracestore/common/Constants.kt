@@ -8,7 +8,7 @@ object PreferencesKeys {
 
 object Constants {
     // API Constants
-    const val BASE_URL = "http://10.0.2.2:3000/"
+    const val BASE_URL = "http://147.79.67.192:3000/"
     const val TIMEOUT_DURATION = 30L
     const val API_KEY = "your-api-key"
     const val DATABASE_NAME = "my_database"
