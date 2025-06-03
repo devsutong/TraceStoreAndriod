@@ -63,7 +63,11 @@ fun NavGraphBuilder.authNavGraph(
 
         // Home Screen after Sign In Success
         composable(AuthScreen.SignInSuccess.route) {
-            HomeScreen(context = context, productRepository = productRepository) // Pass productRepository here
+            HomeScreen(context = context, onNavigateToAuth = {
+                navController.navigate(Graph.AUTHENTICATION) {
+                    popUpTo(Graph.ROOT) { inclusive = true }
+                }
+            },  productRepository = productRepository) // Pass productRepository here
         }
     }
 }

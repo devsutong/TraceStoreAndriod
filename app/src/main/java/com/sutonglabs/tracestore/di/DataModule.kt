@@ -38,7 +38,7 @@ object DataModule {
     ): AddressRepository {
         return AddressRepositoryImp(traceStoreAPIService)
     }
-
+    @Singleton
     @Provides
     fun provideOrderRepository(
         traceStoreAPIService: TraceStoreAPI

@@ -6,8 +6,8 @@ import com.sutonglabs.tracestore.api.GetUserResponse
 import com.sutonglabs.tracestore.api.LoginRequest
 import com.sutonglabs.tracestore.api.RegisterRequest
 import com.sutonglabs.tracestore.api.TraceStoreAPI
+import com.sutonglabs.tracestore.api.request_models.UpdateUserRequest
 import com.sutonglabs.tracestore.models.User
-//import com.sutonglabs.tracestore.api.User
 import com.sutonglabs.tracestore.data.getJwtToken
 import com.sutonglabs.tracestore.data.saveJwtToken
 import kotlinx.coroutines.flow.Flow
@@ -26,18 +26,18 @@ class UserRepository @Inject constructor(
         val response = apiService.getUserInfo("Bearer $token")
 
         if (response.isSuccessful && response.body() != null) {
-            val responseData = response.body()!!  // Ensure response body is not null
-            val apiUser = responseData.data  // Extract `data` from response
+            val responseData = response.body()!!
+            val apiUser = responseData.data
 
             Log.d("UserRepository", "Extracted API User: $apiUser")
 
             val mappedUser = User(
-                id = apiUser.id.toInt(),  // Convert Double -> Int directly
+                id = apiUser.id.toInt(),
                 username = apiUser.username ?: "Unknown",
                 email = apiUser.email ?: "No Email",
                 firstName = apiUser.firstName ?: "",
                 lastName = apiUser.lastName ?: "",
-                age = apiUser.age.toInt(),  // Directly convert Double -> Int
+                age = apiUser.age.toInt(),
                 role = apiUser.role ?: "User",
                 gstin = apiUser.gstin,
                 createdAt = apiUser.createdAt,
@@ -50,8 +50,6 @@ class UserRepository @Inject constructor(
         }
     }
 
-
-
     suspend fun getUser(): Result<Int> {
         val token = getJwtToken(context).first()
         val response = apiService.getUser("Bearer $token")
@@ -61,11 +59,13 @@ class UserRepository @Inject constructor(
             Result.failure(Exception("Failed to fetch user"))
         }
     }
+
     suspend fun login(username: String, password: String): Result<String> {
         val response = apiService.login(LoginRequest(username, password))
         return if (response.isSuccessful && response.body() != null) {
             val jwt = response.body()!!.data.token
             saveJwtToken(context, jwt)
+            Log.d("UserRepository", "Saved JWT Token: $jwt")
             Result.success(jwt)
         } else {
             Result.failure(Exception("Login failed"))
@@ -79,16 +79,34 @@ class UserRepository @Inject constructor(
                          age: String,
                          GSTIN: String,
                          password: String
-                         ): Result<String> {
+    ): Result<String> {
         val response = apiService.register(RegisterRequest(username, email, firstName, lastName, age, GSTIN, password))
         return if (response.isSuccessful && response.body() != null) {
             val jwt = response.body()!!.data.token
             saveJwtToken(context, jwt)
+            Log.d("UserRepository", "Saved JWT Token: $jwt")
             Result.success(jwt)
         } else {
             Result.failure(Exception("Registration Failed!"))
         }
+    }
+    suspend fun clearJwtToken(context: Context) {
+        // This function should clear the saved JWT token (likely in SharedPreferences)
+        context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit().clear().apply()
+        Log.d("UserRepository", "JWT Token cleared.")
+    }
 
+    suspend fun updateUser(token: String, firstName: String, lastName: String, age: Int): Result<User> {
+        val request = UpdateUserRequest(firstName, lastName, age)
+        val response = apiService.updateUser(request, "Bearer $token")
+
+        return if (response.isSuccessful && response.body() != null) {
+            Log.d("UserRepository", "User profile updated: ${response.body()!!.data}")
+            Result.success(response.body()!!.data)
+        } else {
+            Log.d("UserRepository", "Failed to update user profile")
+            Result.failure(Exception("Update failed"))
+        }
     }
 
 }

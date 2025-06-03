@@ -6,32 +6,31 @@ data class CreateOrderResponse(
     val addressID: Int
 )
 
-data class Product(
-    val productID: String,
-    val quantity: String
-)
-
-data class OrderResponse(
-    val message: String,
-    val order: Order,
-    val orderItems: List<OrderItem>
+data class OrdersResponse(
+    val status: Boolean,
+    val data: List<Order>
 )
 
 data class Order(
-    val status: String,
     val id: Int,
     val userID: Int,
-    val totalAmount: String,
+    val totalAmount: Int,
     val addressID: Int,
+    val status: String,
+    val createdAt: String,
     val updatedAt: String,
-    val createdAt: String
+    val OrderItems: List<OrderItem>
 )
 
 data class OrderItem(
-    val id: Int,
-    val orderID: Int,
-    val productID: String,
-    val quantity: String,
-    val updatedAt: String,
-    val createdAt: String
+    val quantity: Int,
+    val Product: Product
 )
+
+data class Product(
+    val id: Int,
+    val name: String,
+    val image: String,
+    val price: Int
+)
+

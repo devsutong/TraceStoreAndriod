@@ -1,5 +1,6 @@
 package com.sutonglabs.tracestore.services
 
+import com.sutonglabs.tracestore.api.TraceStoreAPI
 import com.sutonglabs.tracestore.common.Constants.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,7 +13,8 @@ object RetrofitInstance {
             .build()
     }
 
-    val api: ProductApiService by lazy {
-        retrofit.create(ProductApiService::class.java)
+    val api: TraceStoreAPI by lazy {
+        retrofit.create(TraceStoreAPI::class.java)
     }
+
 }

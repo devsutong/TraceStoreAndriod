@@ -1,10 +1,10 @@
 package com.sutonglabs.tracestore.viewmodels
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sutonglabs.tracestore.models.User
-import androidx.lifecycle.viewmodel.compose.viewModel
-//import com.sutonglabs.tracestore.api.User
 import com.sutonglabs.tracestore.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,9 +35,22 @@ class UserViewModel @Inject constructor(
     val updateState: StateFlow<Result<User>?> = _updateState
     val deleteState: StateFlow<Result<Unit>?> = _deleteState
 
+    // JWT Token flow from UserRepository
     val jwtToken: StateFlow<String?> = userRepository.jwtToken
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    init {
+        viewModelScope.launch {
+            // Check if JWT Token is being emitted properly
+            jwtToken.collect { token ->
+                Log.d("UserViewModel", "JWT Token collected: $token")
+            }
+        }
+        // Fetch user data after initialization
+        viewModelScope.launch {
+            setUser()
+        }
+    }
     fun fetchUserInfo(token: String) {
         viewModelScope.launch {
             val result = userRepository.getUserInfo(token)
@@ -48,12 +61,7 @@ class UserViewModel @Inject constructor(
             }
         }
     }
-
-    init {
-        viewModelScope.launch {
-            setUser()
-        }
-    }
+    // Set user data
     private fun setUser() {
         viewModelScope.launch {
             _user.value = userRepository.getUser()
@@ -78,5 +86,34 @@ class UserViewModel @Inject constructor(
         viewModelScope.launch {
             _registerState.value = userRepository.register(username, email, firstName, lastName, age, GSTIN, password)
         }
+    }
+
+    // Function to update the user profile
+    fun updateUserProfile(firstName: String, lastName: String, age: Int) {
+        val token = jwtToken.value
+
+        // Log token status before performing update
+        if (token.isNullOrEmpty()) {
+            Log.d("UserViewModel", "JWT Token is null or empty!")
+        } else {
+            Log.d("UserViewModel", "Using JWT Token for update: $token")
+
+            viewModelScope.launch {
+                val result = userRepository.updateUser(token, firstName, lastName, age)
+                _updateState.value = result
+            }
+        }
+    }
+    fun logout(context: Context) {
+        viewModelScope.launch {
+            // Clear the token from the repository or local storage
+            userRepository.clearJwtToken(context)
+        }
+    }
+
+
+    // Reset update state
+    fun resetUpdateState() {
+        _updateState.value = null
     }
 }

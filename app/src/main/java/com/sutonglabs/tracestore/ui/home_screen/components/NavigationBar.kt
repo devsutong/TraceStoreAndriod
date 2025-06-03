@@ -18,22 +18,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sutonglabs.tracestore.graphs.detail_graph.DetailScreen
 import com.sutonglabs.tracestore.graphs.home_graph.ShopHomeScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add // <-- Added the import for Add icon
+import androidx.navigation.NavController
 
 @Composable
 fun NavigationBar(
-    navController: NavHostController,
+    navController: NavController,
     isVisible: (Boolean) -> Unit
 ) {
     val navItemList = listOf(
         BottomNavItem.ProfileNav,
         BottomNavItem.HomeNav,
+        BottomNavItem.OrdersNav // Add Orders to bottom navigation
     )
+
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var bottomNavVisibility by remember { mutableStateOf<Boolean>(true) }
@@ -64,16 +66,17 @@ fun NavigationBar(
             NavigationBarItem(
                 selected = false,
                 icon = {
-                    IconButton(onClick = { navController.navigate("add_product_screen") }) {
+                    IconButton(onClick = { navController.navigate("seller_dashboard_screen") }) {
                         Icon(
-                            imageVector = Icons.Filled.Add, // <-- Use the Add icon
-                            contentDescription = "Add Product",
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = "Seller Dashboard",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
                 onClick = {},
             )
+
         }
     }
 

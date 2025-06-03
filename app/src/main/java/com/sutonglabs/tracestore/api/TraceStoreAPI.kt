@@ -6,8 +6,10 @@ import android.util.Log
 import com.sutonglabs.tracestore.api.request_models.CreateAddressRequest
 import com.sutonglabs.tracestore.api.request_models.CreateOrderRequest
 import com.sutonglabs.tracestore.api.request_models.UpdateAddressRequest
+import com.sutonglabs.tracestore.api.request_models.UpdateUserRequest
 import com.sutonglabs.tracestore.api.response_model.CreateAddressResponse
 import com.sutonglabs.tracestore.api.response_model.CreateOrderResponse
+import com.sutonglabs.tracestore.api.response_model.OrdersResponse
 import com.sutonglabs.tracestore.api.response_model.UpdateAddressResponse
 import com.sutonglabs.tracestore.data.getJwtToken
 import com.sutonglabs.tracestore.models.AddToCartRequest
@@ -28,6 +30,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 data class LoginRequest(val username: String, val password: String)
 data class RegisterRequest(val username: String, val email: String, val firstName: String, val lastName: String, val age: String, val GSTIN: String, val password: String)
@@ -55,11 +58,11 @@ interface TraceStoreAPI {
     @GET("user")
     suspend fun getUserInfo(@Header("Authorization") token: String): Response<UserResponse>
 
-    @POST("user/update")
-    suspend fun updateUser(@Body user: User, @Header("Authorization") token: String): Response<User>
-
-    @DELETE("user/{id}")
-    suspend fun deleteUser(@Path("id") id: Int, @Header("Authorization") token: String): Response<Unit>
+    @PATCH("user")
+    suspend fun updateUser(
+        @Body request: UpdateUserRequest,
+        @Header("Authorization") token: String
+    ): Response<UserResponse>
 
     @GET("cart")
     fun getCart(@Header("Authorization") token: String): Call<CartResponse>
@@ -91,6 +94,11 @@ interface TraceStoreAPI {
         @Body address: CreateOrderRequest
     ): Response<CreateOrderResponse>
 
+    @GET("order")
+    suspend fun getOrders(
+        @Header("Authorization") token: String
+    ): Response<OrdersResponse>
+
     @PUT("cart/update")
     suspend fun updateCartItem(
         @Header("Authorization") token: String,
@@ -106,5 +114,17 @@ interface TraceStoreAPI {
     @Multipart
     @POST("upload/image")
     suspend fun uploadImage(@Part image: MultipartBody.Part): Response<ImageUploadResponse>
+
+    @GET("/product/user/products")
+    suspend fun getUserProducts(
+        @Header("Authorization") token: String
+    ): ProductResponse
+
+    @GET("order/seller-orders")
+    suspend fun getSellerOrders(
+        @Header("Authorization") token: String
+    ): Response<SellerOrdersResponseWrapper>
+
+
 }
 
