@@ -16,6 +16,7 @@ import com.sutonglabs.tracestore.ui.login.LoginScreen
 import com.sutonglabs.tracestore.ui.onboarding_screen.SplashScreen
 import com.sutonglabs.tracestore.ui.signup.RegisterScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
+import com.sutonglabs.tracestore.ui.admin.AdminDashboardScreen
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
@@ -69,5 +70,10 @@ fun NavGraphBuilder.authNavGraph(
                 }
             },  productRepository = productRepository) // Pass productRepository here
         }
+        // Admin Dashboard Screen for admin users
+        composable(AuthScreen.AdminDashboard.route) {
+            AdminDashboardScreen(navController = navController)
+        }
+
     }
 }

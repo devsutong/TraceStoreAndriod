@@ -104,10 +104,20 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+    // Add to UserViewModel
+    fun getUserRole(context: Context): String? {
+        return context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+            .getString("USER_ROLE", null)
+    }
+
+    // Update logout to clear role too
     fun logout(context: Context) {
         viewModelScope.launch {
-            // Clear the token from the repository or local storage
             userRepository.clearJwtToken(context)
+            context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                .edit()
+                .remove("USER_ROLE")
+                .apply()
         }
     }
 

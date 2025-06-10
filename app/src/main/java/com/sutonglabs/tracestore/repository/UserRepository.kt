@@ -63,13 +63,27 @@ class UserRepository @Inject constructor(
     suspend fun login(username: String, password: String): Result<String> {
         val response = apiService.login(LoginRequest(username, password))
         return if (response.isSuccessful && response.body() != null) {
-            val jwt = response.body()!!.data.token
+            val responseData = response.body()!!
+            val jwt = responseData.data.token
+            val role = responseData.data.user.role // Get role from API response
+
+            // Save both JWT and role
             saveJwtToken(context, jwt)
-            Log.d("UserRepository", "Saved JWT Token: $jwt")
+            saveUserRole(context, role) // Add this new function
+
+            Log.d("UserRepository", "Saved JWT: $jwt | Role: $role")
             Result.success(jwt)
         } else {
             Result.failure(Exception("Login failed"))
         }
+    }
+
+    // Add this new function
+    private fun saveUserRole(context: Context, role: String) {
+        context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+            .edit()
+            .putString("USER_ROLE", role)
+            .apply()
     }
 
     suspend fun register(username: String,
