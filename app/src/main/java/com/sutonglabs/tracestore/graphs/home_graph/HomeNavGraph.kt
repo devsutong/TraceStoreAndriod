@@ -1,5 +1,6 @@
 package com.sutonglabs.tracestore.graphs.home_graph
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -16,6 +17,7 @@ import com.sutonglabs.tracestore.ui.favourite_screen.FavouriteScreen
 import com.sutonglabs.tracestore.ui.profile_screen.ProfileScreen
 import com.sutonglabs.tracestore.ui.order_screen.OrderScreen // Import your OrdersScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
+import com.sutonglabs.tracestore.ui.qrscanner.QRScannerScreen
 import com.sutonglabs.tracestore.ui.seller.SellerOrdersScreen
 import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerDashboardScreen
 import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerProductListScreen
@@ -81,6 +83,16 @@ fun HomeNavGraph(
                 navHostController.navigate(DetailScreen.ProductDetailScreen.route + "/$productId")
             })
         }
+        composable("qrScanner") {
+            QRScannerScreen(
+                navController = navHostController,
+                onResult = { scannedValue ->
+                    Log.d("QR_RESULT", scannedValue)
+                    // Optional: navigate or process scanned data
+                }
+            )
+        }
+
 
 
         // detail and cart graphs

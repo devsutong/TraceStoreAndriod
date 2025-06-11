@@ -57,15 +57,6 @@ fun AdminDashboardScreen(navController: NavController) {
                             onClick = { /* navigate to product management */ }
                         )
                     }
-                    Box(modifier = Modifier.weight(1f)) {
-                        AdminFeatureCard(
-                            title = "Order Management",
-                            description = "View and manage customer orders.",
-                            icon = Icons.Default.ShoppingCart,
-                            buttonText = "View Orders",
-                            onClick = { /* navigate to order management */ }
-                        )
-                    }
                 }
             }
 
@@ -77,20 +68,20 @@ fun AdminDashboardScreen(navController: NavController) {
                 ) {
                     Box(modifier = Modifier.weight(1f)) {
                         AdminFeatureCard(
+                            title = "Order Management",
+                            description = "View and manage customer orders.",
+                            icon = Icons.Default.ShoppingCart,
+                            buttonText = "View Orders",
+                            onClick = { /* navigate to order management */ }
+                        )
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        AdminFeatureCard(
                             title = "Category Management",
                             description = "Organize and manage product categories.",
                             icon = Icons.Default.Category,
                             buttonText = "Manage Categories",
                             onClick = { /* navigate to category management */ }
-                        )
-                    }
-                    Box(modifier = Modifier.weight(1f)) {
-                        AdminFeatureCard(
-                            title = "Payment History",
-                            description = "Track and manage all payment records.",
-                            icon = Icons.Default.Receipt,
-                            buttonText = "View Payments",
-                            onClick = { /* navigate to payment history */ }
                         )
                     }
                 }
@@ -129,7 +120,7 @@ fun AdminFeatureCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp),
+            .height(220.dp),
         elevation = CardDefaults.cardElevation()
     ) {
         Column(
@@ -151,5 +142,3 @@ fun AdminFeatureCard(
         }
     }
 }
-
-

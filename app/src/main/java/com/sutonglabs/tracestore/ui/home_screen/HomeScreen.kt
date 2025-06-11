@@ -10,8 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sutonglabs.tracestore.graphs.home_graph.HomeNavGraph
 import com.sutonglabs.tracestore.graphs.detail_graph.DetailScreen
@@ -39,11 +37,20 @@ fun HomeScreen(
                 navController = navController,
                 isVisible = topBarVisibilityState.value,
                 searchCharSequence = {},
+
+                // 👇 Cart Icon Action
                 onCartIconClick = {
                     navController.navigate(DetailScreen.CartScreen.route)
                 },
+
+                // 👇 Notification Icon Action
                 onNotificationIconClick = {
                     navController.navigate(DetailScreen.NotificationScreen.route)
+                },
+
+                // 👇 Camera Icon Action
+                onCameraIconClick = {
+                    navController.navigate("qrScanner") // Make sure to add this in HomeNavGraph
                 }
             )
         },
@@ -62,7 +69,7 @@ fun HomeScreen(
                 navHostController = navController,
                 productRepository = productRepository,
                 userViewModel = userViewModel,
-                onNavigateToAuth = onNavigateToAuth,
+                onNavigateToAuth = onNavigateToAuth
             )
         }
     }

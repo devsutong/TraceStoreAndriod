@@ -2,39 +2,23 @@ package com.sutonglabs.tracestore.ui.home_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,97 +28,124 @@ fun AppBar(
     isVisible: Boolean,
     searchCharSequence: (String) -> Unit,
     onNotificationIconClick: () -> Unit,
-    onCartIconClick: () -> Unit
+    onCartIconClick: () -> Unit,
+    onCameraIconClick: () -> Unit // 👈 NEW CALLBACK
 ) {
-    var typedText by remember {
-        mutableStateOf(TextFieldValue())
-    }
+    var typedText by remember { mutableStateOf(TextFieldValue()) }
+
     if (isVisible) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 1.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                // Cart Icon
+                IconBox(
+                    icon = Icons.Filled.ShoppingCart,
+                    contentDescription = "shopping cart",
+                    onClick = onCartIconClick
+                )
+
+                // Notification Icon with badge
                 Box(
                     modifier = Modifier
+                        .size(40.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primary)
-                        .clickable {
-                            onCartIconClick()
-                        },
+                        .clickable { onNotificationIconClick() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(imageVector = Icons.Filled.ShoppingCart, contentDescription = "shopping cart")
-                }
-                ConstraintLayout() {
-                    val (notification, notificationCounter) = createRefs()
-
+                    Icon(
+                        imageVector = Icons.Filled.Notifications,
+                        contentDescription = "notification",
+                        tint = Color.White
+                    )
                     Box(
                         modifier = Modifier
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary)
-                            .constrainAs(notification) {}
-                            .clickable {
-                                onNotificationIconClick()
-                            },
-
+                            .size(14.dp)
+                            .background(Color.Red, CircleShape)
+                            .align(Alignment.TopEnd)
+                            .offset(x = 4.dp, y = (-4).dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Notifications,
-                            contentDescription = "notification"
+                        Text(
+                            text = "3",
+                            color = Color.White,
+                            fontSize = 8.sp
                         )
                     }
-                    //notification count
-                    Box(
-                        modifier = Modifier
-                            .background(color = Color.Red, shape = CircleShape)
-                            .padding(1.dp)
-                            .constrainAs(notificationCounter) {
-                                top.linkTo(notification.top)
-                                end.linkTo(notification.end)
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "3", fontSize = 8.sp, color = Color.White)
-                    }
                 }
+
+                // Camera Icon for QR scanning
+                IconBox(
+                    icon = Icons.Filled.CameraAlt,
+                    contentDescription = "scan QR code",
+                    onClick = onCameraIconClick
+                )
             }
+
+            // Search Field
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 1.dp, bottom = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    .padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TextField(
                     value = typedText,
-                    onValueChange = { newText: TextFieldValue -> // TextfieldValue??
-                        typedText = newText
-                        searchCharSequence(newText.text)
+                    onValueChange = {
+                        typedText = it
+                        searchCharSequence(it.text)
                     },
                     singleLine = true,
-                    placeholder = { Text(text = "Search product") },
-                    leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "search") },
+                    placeholder = { Text("Search product") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "search"
+                        )
+                    },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onSecondary //MaterialTheme.colors.PrimaryColor
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        cursorColor = MaterialTheme.colorScheme.primary
                     ),
+                    shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceContainerLow, //PrimaryLightColor
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .weight(1f),
+                        .fillMaxWidth()
+                        .height(52.dp)
                 )
-
             }
         }
+    }
+}
+
+@Composable
+private fun IconBox(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = Color.White
+        )
     }
 }

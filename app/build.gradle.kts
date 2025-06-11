@@ -111,6 +111,14 @@ dependencies {
     // datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    // CameraX
+    implementation ("androidx.camera:camera-camera2:1.3.0")
+    implementation ("androidx.camera:camera-lifecycle:1.3.0")
+    implementation ("androidx.camera:camera-view:1.3.0")
+    implementation ("androidx.camera:camera-extensions:1.3.0")
+
+    // ML Kit Barcode Scanning
+    implementation ("com.google.mlkit:barcode-scanning:17.2.0")
 }
 
 // Allow references to generated code
