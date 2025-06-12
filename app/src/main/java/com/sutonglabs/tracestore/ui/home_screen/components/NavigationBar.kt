@@ -3,27 +3,20 @@ package com.sutonglabs.tracestore.ui.home_screen.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sutonglabs.tracestore.graphs.detail_graph.DetailScreen
 import com.sutonglabs.tracestore.graphs.home_graph.ShopHomeScreen
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add // <-- Added the import for Add icon
-import androidx.navigation.NavController
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.QrCodeScanner
 
 @Composable
 fun NavigationBar(
@@ -33,12 +26,11 @@ fun NavigationBar(
     val navItemList = listOf(
         BottomNavItem.ProfileNav,
         BottomNavItem.HomeNav,
-        BottomNavItem.OrdersNav // Add Orders to bottom navigation
+        BottomNavItem.OrdersNav
     )
 
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var bottomNavVisibility by remember { mutableStateOf<Boolean>(true) }
+    var bottomNavVisibility by remember { mutableStateOf(true) }
 
     if (bottomNavVisibility) {
         NavigationBar(
@@ -62,7 +54,7 @@ fun NavigationBar(
                 )
             }
 
-            // Add the "+" icon for navigating to AddProductScreen
+            // + Icon for Seller Dashboard
             NavigationBarItem(
                 selected = false,
                 icon = {
@@ -77,23 +69,31 @@ fun NavigationBar(
                 onClick = {},
             )
 
+            // QR Scanner Icon
+            NavigationBarItem(
+                selected = false,
+                icon = {
+                    Icon(
+                        imageVector = Icons.Outlined.QrCodeScanner,
+                        contentDescription = "QR Scanner",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                onClick = {
+                    navController.navigate("qr_choice")
+                }
+            )
+
         }
     }
 
-    // Logic for hiding the bottom bar when on product details, cart, etc.
     when (navBackStackEntry?.destination?.route) {
         ShopHomeScreen.DashboardScreen.route -> {
             bottomNavVisibility = true
             isVisible(true)
         }
-        DetailScreen.ProductDetailScreen.route -> {
-            bottomNavVisibility = false
-            isVisible(false)
-        }
-        DetailScreen.CartScreen.route -> {
-            bottomNavVisibility = false
-            isVisible(false)
-        }
+        DetailScreen.ProductDetailScreen.route,
+        DetailScreen.CartScreen.route,
         DetailScreen.NotificationScreen.route -> {
             bottomNavVisibility = false
             isVisible(false)

@@ -81,13 +81,6 @@ fun AppBar(
                         )
                     }
                 }
-
-                // Camera Icon for QR scanning
-                IconBox(
-                    icon = Icons.Filled.CameraAlt,
-                    contentDescription = "scan QR code",
-                    onClick = onCameraIconClick
-                )
             }
 
             // Search Field
