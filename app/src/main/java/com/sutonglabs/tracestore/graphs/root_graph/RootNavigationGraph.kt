@@ -10,6 +10,8 @@ import com.sutonglabs.tracestore.graphs.auth_graph.authNavGraph
 import com.sutonglabs.tracestore.ui.home_screen.HomeScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
 import com.sutonglabs.tracestore.graphs.home_graph.HomeNavGraph
+import com.sutonglabs.tracestore.ui.product_admin.ViewAllProductsScreen
+
 @Composable
 fun RootNavigationGraph(
     navHostController: NavHostController,
@@ -48,6 +50,9 @@ fun RootNavigationGraph(
                     popUpTo(Graph.ROOT) { inclusive = true }
                 }
             }, productRepository = productRepository) // Pass productRepository here
+        }
+        composable("view_all_products") {
+            ViewAllProductsScreen(navController = navHostController)
         }
     }
 }

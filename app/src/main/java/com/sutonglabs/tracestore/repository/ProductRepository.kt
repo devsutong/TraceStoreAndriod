@@ -12,6 +12,11 @@ interface ProductRepository {
     suspend fun getProductDetail(id: Int, context: Context): Product?
     suspend fun addProduct(product: ProductCreate, context: Context): Product?  // Accept context for JWT token
     suspend fun uploadImage(image: MultipartBody.Part): ImageUploadResponse?
+    suspend fun updateProduct(id: Int, updatedProduct: ProductCreate, context: Context): Product?
+    suspend fun deleteProduct(id: Int, context: Context): Boolean
+
+
+
 }
 
 

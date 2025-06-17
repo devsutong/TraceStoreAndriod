@@ -54,7 +54,7 @@ fun AdminDashboardScreen(navController: NavController) {
                             description = "Manage products, inventory, and stock.",
                             icon = Icons.Default.Inventory,
                             buttonText = "Manage Products",
-                            onClick = { /* navigate to product management */ }
+                            onClick = { navController.navigate("view_all_products") } // 👈 Navigate here
                         )
                     }
                 }

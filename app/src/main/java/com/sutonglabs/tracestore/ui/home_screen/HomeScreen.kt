@@ -16,7 +16,6 @@ import com.sutonglabs.tracestore.graphs.detail_graph.DetailScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
 import com.sutonglabs.tracestore.ui.home_screen.components.NavigationBar
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
-import androidx.compose.material.icons.outlined.QrCodeScanner
 
 @Composable
 fun HomeScreen(

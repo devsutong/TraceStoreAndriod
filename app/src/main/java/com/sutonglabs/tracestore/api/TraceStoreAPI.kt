@@ -125,6 +125,17 @@ interface TraceStoreAPI {
         @Header("Authorization") token: String
     ): Response<SellerOrdersResponseWrapper>
 
+    @PATCH("product/{id}")
+    suspend fun updateProduct(
+        @Path("id") id: Int,
+        @Header("Authorization") token: String,
+        @Body product: ProductCreate
+    ): Response<Product>
 
+    @DELETE("product/{id}")
+    suspend fun deleteProduct(
+        @Path("id") productId: Int,
+        @Header("Authorization") token: String
+    ): Response<Unit>
 }
 

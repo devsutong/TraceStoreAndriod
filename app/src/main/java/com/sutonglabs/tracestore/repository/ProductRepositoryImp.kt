@@ -69,7 +69,26 @@ class ProductRepositoryImp @Inject constructor(
             null
         }
     }
+    override suspend fun updateProduct(id: Int, product: ProductCreate, context: Context): Product? {
+        val token = getJwtToken(context).first()
+        return try {
+            val response = traceStoreApiService.updateProduct(id, "Bearer $token", product)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            Log.e("ProductRepository", "Error updating product: ${e.localizedMessage}")
+            null
+        }
+    }
 
+    override suspend fun deleteProduct(id: Int, context: Context): Boolean {
+        val token = getJwtToken(context).first()
+        return try {
+            val response = traceStoreApiService.deleteProduct(id, "Bearer $token")
+            response.isSuccessful
+        } catch (e: Exception) {
+            false
+        }
+    }
 
     // Upload Image method
     override suspend fun uploadImage(image: MultipartBody.Part): ImageUploadResponse? {
