@@ -17,6 +17,7 @@ import com.sutonglabs.tracestore.graphs.home_graph.ShopHomeScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.QrCodeScanner
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun NavigationBar(
@@ -28,56 +29,55 @@ fun NavigationBar(
         BottomNavItem.HomeNav,
         BottomNavItem.OrdersNav
     )
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var bottomNavVisibility by remember { mutableStateOf(true) }
 
     if (bottomNavVisibility) {
         NavigationBar(
             containerColor = Color.White,
-            contentColor = Color.Black,
-            tonalElevation = 1.dp,
+            contentColor = MaterialTheme.colorScheme.primary,
+            tonalElevation = 4.dp,
             modifier = Modifier
-                .height(60.dp)
-                .background(color = Color.White)
-                .shadow(
-                    shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
-                    elevation = 12.dp,
-                )
-                .clip(RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp))
+                .height(68.dp)
+                .shadow(8.dp, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
         ) {
             navItemList.forEach { screen ->
                 NavigationBarItem(
                     selected = screen.route == navBackStackEntry?.destination?.route,
-                    icon = { Icon(imageVector = screen.icon, contentDescription = "icon") },
-                    onClick = { navController.navigate(screen.route) },
+                    icon = {
+                        Icon(imageVector = screen.icon, contentDescription = screen.title)
+                    },
+                    label = {
+                        Text(text = screen.title, fontSize = 12.sp)
+                    },
+                    onClick = { navController.navigate(screen.route) }
                 )
             }
-
-            // + Icon for Seller Dashboard
             NavigationBarItem(
-                selected = false,
+                selected = navBackStackEntry?.destination?.route == "seller_dashboard_screen",
                 icon = {
-                    IconButton(onClick = { navController.navigate("seller_dashboard_screen") }) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = "Seller Dashboard",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Seller Dashboard")
                 },
-                onClick = {},
+                label = {
+                    Text("Sell", fontSize = 12.sp)
+                },
+                onClick = {
+                    navController.navigate("seller_dashboard_screen")
+                }
             )
 
-            // QR Scanner Icon
             NavigationBarItem(
-                selected = false,
+                selected = navBackStackEntry?.destination?.route == "qr_choice",
                 icon = {
                     Icon(
                         imageVector = Icons.Outlined.QrCodeScanner,
                         contentDescription = "QR Scanner",
                         tint = MaterialTheme.colorScheme.primary
                     )
+                },
+                label = {
+                    Text("QR", fontSize = 12.sp)
                 },
                 onClick = {
                     navController.navigate("qr_choice")

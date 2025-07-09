@@ -1,14 +1,14 @@
 package com.sutonglabs.tracestore.ui.home_screen
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sutonglabs.tracestore.graphs.home_graph.HomeNavGraph
@@ -26,8 +26,6 @@ fun HomeScreen(
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val topBarVisibilityState = remember { mutableStateOf(true) }
-
-    // Obtain UserViewModel instance via Hilt
     val userViewModel: UserViewModel = hiltViewModel()
 
     Scaffold(
@@ -37,20 +35,14 @@ fun HomeScreen(
                 navController = navController,
                 isVisible = topBarVisibilityState.value,
                 searchCharSequence = {},
-
-                // 👇 Cart Icon Action
                 onCartIconClick = {
                     navController.navigate(DetailScreen.CartScreen.route)
                 },
-
-                // 👇 Notification Icon Action
                 onNotificationIconClick = {
                     navController.navigate(DetailScreen.NotificationScreen.route)
                 },
-
-                // 👇 Camera Icon Action
                 onCameraIconClick = {
-                    navController.navigate("qrScanner") // Make sure to add this in HomeNavGraph
+                    navController.navigate("qrScanner")
                 }
             )
         },
@@ -58,19 +50,28 @@ fun HomeScreen(
             NavigationBar(navController = navController) { isVisible ->
                 topBarVisibilityState.value = isVisible
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            HomeNavGraph(
-                navHostController = navController,
-                productRepository = productRepository,
-                userViewModel = userViewModel,
-                onNavigateToAuth = onNavigateToAuth
-            )
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                HomeNavGraph(
+                    navHostController = navController,
+                    productRepository = productRepository,
+                    userViewModel = userViewModel,
+                    onNavigateToAuth = onNavigateToAuth
+                )
+            }
         }
     }
 }
