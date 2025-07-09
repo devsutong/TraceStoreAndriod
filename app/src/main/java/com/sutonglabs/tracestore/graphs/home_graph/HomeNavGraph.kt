@@ -15,8 +15,8 @@ import com.sutonglabs.tracestore.ui.conversation_screen.ConversationScreen
 import com.sutonglabs.tracestore.ui.dashboard_screen.DashboardScreen
 import com.sutonglabs.tracestore.ui.favourite_screen.FavouriteScreen
 import com.sutonglabs.tracestore.ui.order_screen.OrderScreen
-import com.sutonglabs.tracestore.ui.product_admin.UpdateProductScreen
-import com.sutonglabs.tracestore.ui.product_admin.ViewAllProductsScreen
+import com.sutonglabs.tracestore.ui.admin.product_admin.UpdateProductScreen
+import com.sutonglabs.tracestore.ui.admin.product_admin.ViewAllProductsScreen
 import com.sutonglabs.tracestore.ui.profile_screen.ProfileScreen
 import com.sutonglabs.tracestore.ui.qrscanner.QRScannerScreen
 import com.sutonglabs.tracestore.ui.qrscanner.EnterUIDScreen

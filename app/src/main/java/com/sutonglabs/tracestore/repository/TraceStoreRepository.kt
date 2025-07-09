@@ -11,7 +11,7 @@ class TraceStoreRepository @Inject constructor(private val  apiService: TraceSto
                          email: String,
                          firstName: String,
                          lastName: String,
-                         age: String,
+                         age: Int,
                          GSTIN: String,
                          password: String) {
 

@@ -51,6 +51,29 @@ class UserViewModel @Inject constructor(
             setUser()
         }
     }
+
+    private val _allUsers = MutableStateFlow<List<User>>(emptyList())
+    val allUsers: StateFlow<List<User>> = _allUsers
+
+    private val _userLoading = MutableStateFlow(false)
+    val userLoading: StateFlow<Boolean> = _userLoading
+
+    private val _userError = MutableStateFlow<String?>(null)
+    val userError: StateFlow<String?> = _userError
+
+    fun fetchAllUsers() {
+        val token = jwtToken.value ?: return
+        viewModelScope.launch {
+            _userLoading.value = true
+            _userError.value = null
+            val result = userRepository.getAllUsers(token)
+            result
+                .onSuccess { _allUsers.value = it }
+                .onFailure { _userError.value = it.message }
+            _userLoading.value = false
+        }
+    }
+
     fun fetchUserInfo(token: String) {
         viewModelScope.launch {
             val result = userRepository.getUserInfo(token)
@@ -79,7 +102,7 @@ class UserViewModel @Inject constructor(
         email: String,
         firstName: String,
         lastName: String,
-        age: String,
+        age: Int,
         GSTIN: String,
         password: String
     ) {

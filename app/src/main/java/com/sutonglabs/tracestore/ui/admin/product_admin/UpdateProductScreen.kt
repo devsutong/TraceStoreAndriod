@@ -1,4 +1,4 @@
-package com.sutonglabs.tracestore.ui.product_admin
+package com.sutonglabs.tracestore.ui.admin.product_admin
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*

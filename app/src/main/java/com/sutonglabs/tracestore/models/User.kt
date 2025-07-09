@@ -22,3 +22,7 @@ data class UserResponse(
     val status: Boolean,
     val data: User
 )
+data class UserListResponse(
+    val success: Boolean,
+    val data: List<User>
+)
