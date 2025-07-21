@@ -45,8 +45,7 @@ fun AdminDashboardScreen(navController: NavController) {
                             description = "Manage all registered users and their roles.",
                             icon = Icons.Default.Group,
                             buttonText = "Manage Users",
-                            onClick = { navController.navigate("user_management") }
-
+                            onClick = { /* navigate to user management */ }
                         )
                     }
                     Box(modifier = Modifier.weight(1f)) {

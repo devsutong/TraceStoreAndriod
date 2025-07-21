@@ -10,8 +10,7 @@ import com.sutonglabs.tracestore.graphs.auth_graph.authNavGraph
 import com.sutonglabs.tracestore.ui.home_screen.HomeScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
 import com.sutonglabs.tracestore.graphs.home_graph.HomeNavGraph
-import com.sutonglabs.tracestore.ui.admin.product_admin.ViewAllProductsScreen
-import com.sutonglabs.tracestore.ui.admin.user_admin.UserManagementScreen
+import com.sutonglabs.tracestore.ui.product_admin.ViewAllProductsScreen
 
 @Composable
 fun RootNavigationGraph(
@@ -55,9 +54,5 @@ fun RootNavigationGraph(
         composable("view_all_products") {
             ViewAllProductsScreen(navController = navHostController)
         }
-        composable("user_management") {
-            UserManagementScreen(navController = navHostController)
-        }
-
     }
 }

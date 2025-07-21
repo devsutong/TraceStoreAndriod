@@ -1,4 +1,4 @@
-package com.sutonglabs.tracestore.ui.admin.product_admin
+package com.sutonglabs.tracestore.ui.product_admin
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -96,7 +96,7 @@ fun ProductItemCard(
             ) {
                 Button(
                     onClick = onUpdateClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3F51B5)) // Orange
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA726)) // Orange
                 ) {
                     Icon(Icons.Default.Edit, contentDescription = "Update")
                     Spacer(Modifier.width(4.dp))
@@ -104,7 +104,7 @@ fun ProductItemCard(
                 }
                 Button(
                     onClick = onDeleteClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF10B0B)) // Red
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE57373)) // Red
                 ) {
                     Icon(Icons.Default.Delete, contentDescription = "Delete")
                     Spacer(Modifier.width(4.dp))

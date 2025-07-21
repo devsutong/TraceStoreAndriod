@@ -134,14 +134,12 @@ fun RegisterScreen(navController: NavHostController, viewModel: UserViewModel = 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                val ageInt = age.toIntOrNull() ?: 0  // safely parse String to Int
-
                 viewModel.register(
                     username,
                     email,
                     firstName,
                     lastName,
-                    ageInt,
+                    age,
                     gstin,
                     password
                 )

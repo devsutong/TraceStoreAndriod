@@ -2,6 +2,7 @@ package com.sutonglabs.tracestore.repository
 
 import android.content.Context
 import android.util.Log
+import com.sutonglabs.tracestore.api.GetUserResponse
 import com.sutonglabs.tracestore.api.LoginRequest
 import com.sutonglabs.tracestore.api.RegisterRequest
 import com.sutonglabs.tracestore.api.TraceStoreAPI
@@ -24,25 +25,28 @@ class UserRepository @Inject constructor(
     suspend fun getUserInfo(token: String): Result<User> {
         val response = apiService.getUserInfo("Bearer $token")
 
-        return if (response.isSuccessful && response.body() != null) {
-            val apiUser = response.body()!!.data
+        if (response.isSuccessful && response.body() != null) {
+            val responseData = response.body()!!
+            val apiUser = responseData.data
+
+            Log.d("UserRepository", "Extracted API User: $apiUser")
 
             val mappedUser = User(
-                id = apiUser.id,
+                id = apiUser.id.toInt(),
                 username = apiUser.username ?: "Unknown",
                 email = apiUser.email ?: "No Email",
                 firstName = apiUser.firstName ?: "",
                 lastName = apiUser.lastName ?: "",
-                age = apiUser.age,
+                age = apiUser.age.toInt(),
                 role = apiUser.role ?: "User",
                 gstin = apiUser.gstin,
                 createdAt = apiUser.createdAt,
                 updatedAt = apiUser.updatedAt
             )
 
-            Result.success(mappedUser)
+            return Result.success(mappedUser)
         } else {
-            Result.failure(Exception("Failed to fetch user info"))
+            return Result.failure(Exception("Failed to fetch user info"))
         }
     }
 
@@ -61,10 +65,11 @@ class UserRepository @Inject constructor(
         return if (response.isSuccessful && response.body() != null) {
             val responseData = response.body()!!
             val jwt = responseData.data.token
-            val role = responseData.data.user.role
+            val role = responseData.data.user.role // Get role from API response
 
+            // Save both JWT and role
             saveJwtToken(context, jwt)
-            saveUserRole(context, role)
+            saveUserRole(context, role) // Add this new function
 
             Log.d("UserRepository", "Saved JWT: $jwt | Role: $role")
             Result.success(jwt)
@@ -73,6 +78,7 @@ class UserRepository @Inject constructor(
         }
     }
 
+    // Add this new function
     private fun saveUserRole(context: Context, role: String) {
         context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
             .edit()
@@ -80,33 +86,27 @@ class UserRepository @Inject constructor(
             .apply()
     }
 
-    suspend fun register(
-        username: String,
-        email: String,
-        firstName: String,
-        lastName: String,
-        age: Int,
-        GSTIN: String,
-        password: String
+    suspend fun register(username: String,
+                         email: String,
+                         firstName: String,
+                         lastName: String,
+                         age: String,
+                         GSTIN: String,
+                         password: String
     ): Result<String> {
-        val request = RegisterRequest(username, email, firstName, lastName, age, GSTIN, password)
-        val response = apiService.register(request)
-
+        val response = apiService.register(RegisterRequest(username, email, firstName, lastName, age, GSTIN, password))
         return if (response.isSuccessful && response.body() != null) {
             val jwt = response.body()!!.data.token
             saveJwtToken(context, jwt)
             Log.d("UserRepository", "Saved JWT Token: $jwt")
             Result.success(jwt)
         } else {
-            Result.failure(Exception("Registration failed!"))
+            Result.failure(Exception("Registration Failed!"))
         }
     }
-
     suspend fun clearJwtToken(context: Context) {
-        context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-            .edit()
-            .clear()
-            .apply()
+        // This function should clear the saved JWT token (likely in SharedPreferences)
+        context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit().clear().apply()
         Log.d("UserRepository", "JWT Token cleared.")
     }
 
@@ -120,20 +120,6 @@ class UserRepository @Inject constructor(
         } else {
             Log.d("UserRepository", "Failed to update user profile")
             Result.failure(Exception("Update failed"))
-        }
-    }
-
-    suspend fun getAllUsers(token: String): Result<List<User>> {
-        return try {
-            val response = apiService.getAllUsers("Bearer $token")
-            if (response.isSuccessful && response.body() != null) {
-                val apiUsers = response.body()!!.data
-                Result.success(apiUsers)
-            } else {
-                Result.failure(Exception("Failed to fetch users"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 

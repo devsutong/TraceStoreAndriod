@@ -33,7 +33,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 data class LoginRequest(val username: String, val password: String)
-data class RegisterRequest(val username: String, val email: String, val firstName: String, val lastName: String, val age: Int, val GSTIN: String, val password: String)
+data class RegisterRequest(val username: String, val email: String, val firstName: String, val lastName: String, val age: String, val GSTIN: String, val password: String)
 data class UpdateCartRequest(val cartItemId: Int, val quantity: Int)
 
 interface TraceStoreAPI {
@@ -137,11 +137,5 @@ interface TraceStoreAPI {
         @Path("id") productId: Int,
         @Header("Authorization") token: String
     ): Response<Unit>
-
-    @GET("user/all")
-    suspend fun getAllUsers(
-        @Header("Authorization") token: String
-    ): Response<UserListResponse>
-
 }
 

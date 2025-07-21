@@ -22,7 +22,7 @@ data class User(
     val password: String,
     val firstName: String,
     val lastName: String,
-    val age: Int,
+    val age: String,
     val role: String,
     val gstin: String,
     val createdAt: String,
