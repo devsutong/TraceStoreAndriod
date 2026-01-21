@@ -46,10 +46,9 @@ fun SellerOrdersScreen(
     var isLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        isLoading = true
         viewModel.fetchSellerOrders(context)
-        isLoading = false
     }
+
 
     when {
         isLoading -> {
@@ -74,7 +73,7 @@ fun SellerOrdersScreen(
                     .padding(8.dp)
             ) {
                 items(sellerOrders) { order ->
-                    SellerOrderCard(order = order, onProductClick = onProductClick)
+                    SellerOrderCard(order = order, onProductClick = onProductClick, viewModel = viewModel)
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             }
@@ -85,8 +84,11 @@ fun SellerOrdersScreen(
 @Composable
 fun SellerOrderCard(
     order: SellerOrderResponse,
-    onProductClick: (Int) -> Unit
+    onProductClick: (Int) -> Unit,
+    viewModel: OrderViewModel
 ) {
+    val status = order.status?.takeIf { it.isNotBlank() } ?: "Pending"
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -103,6 +105,55 @@ fun SellerOrderCard(
             Text(text = "Email: $buyerEmail")
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Items:", style = MaterialTheme.typography.titleSmall)
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // ORDER STATUS DISPLAY
+            Text(
+                text = "Status: $status",
+                fontWeight = FontWeight.Bold,
+                color = when (status) {
+                    "Pending" -> Color.Gray
+                    "Shipped" -> Color.Blue
+                    "Delivered" -> Color.Green
+                    else -> Color.Black
+                }
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            val context = LocalContext.current
+            //SELLER ACTIONS
+            when (status) {
+                "Success" -> {
+                    Text(
+                        text = "Mark as Shipped",
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.updateOrderStatus(context, order.orderID, "Shipped")
+                            }
+                            .padding(vertical = 4.dp)
+                    )
+                }
+                "Shipped" -> {
+                    Text(
+                        text = "Mark as Delivered",
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.updateOrderStatus(context, order.orderID, "Delivered")
+                            }
+                            .padding(vertical = 4.dp)
+                    )
+                }
+                "Delivered" -> {
+                    Text(
+                        text = "Delivered ✅",
+                        color = Color.Green,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
 
             order.items?.forEach { item ->
                 ProductItemView(item = item, onClick = { onProductClick(item.product.id) })

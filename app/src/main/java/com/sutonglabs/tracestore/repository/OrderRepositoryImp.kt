@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import android.util.Log
+import android.widget.Toast
 
 @Singleton
 class OrderRepositoryImp @Inject constructor(
@@ -55,4 +57,29 @@ class OrderRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun updateOrderStatus(
+        context: Context,
+        orderId: Int,
+        status: String
+    ) {
+        val rawToken = getJwtToken(context).first()
+            ?: throw IllegalStateException("JWT token is null")
+
+        //Log.d("TOKEN_DEBUG", "rawToken = $rawToken")
+
+        val token = "Bearer $rawToken"
+
+        val response = traceStoreApiService.updateOrderStatus(
+            token = token,
+            orderId = orderId,
+            body = mapOf("status" to status)
+        )
+
+        //Toast.makeText(context, "Address Created!", Toast.LENGTH_SHORT).show()
+
+        if (!response.isSuccessful) {
+            throw Exception("Failed to update order status: ${response.errorBody()?.string()}")
+        }
+    }
+    
 }

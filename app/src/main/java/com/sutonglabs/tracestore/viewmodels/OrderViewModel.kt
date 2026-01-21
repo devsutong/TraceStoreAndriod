@@ -76,6 +76,19 @@ class OrderViewModel @Inject constructor(
         }
     }
 
+    fun updateOrderStatus(context: Context, orderId: Int, status: String) {
+        viewModelScope.launch {
+            try {
+                orderRepository.updateOrderStatus(context, orderId, status)
+                Toast.makeText(context, "Address Created!", Toast.LENGTH_SHORT).show()
+                fetchSellerOrders(context) // IMPORTANT: refresh after update
+            } catch (e: Exception) {
+                Log.e("OrderVM", "Status update failed", e)
+            }
+        }
+    }
+
+
 
 
 }

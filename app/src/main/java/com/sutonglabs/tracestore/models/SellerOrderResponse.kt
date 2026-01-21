@@ -3,7 +3,8 @@ package com.sutonglabs.tracestore.models
 data class SellerOrderResponse(
     val orderID: Int,
     val buyer: Buyer,
-    val items: List<SellerOrderItem>
+    val items: List<SellerOrderItem>,
+    val status: String
 )
 
 data class Buyer(

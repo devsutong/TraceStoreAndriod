@@ -44,12 +44,16 @@ class UserViewModel @Inject constructor(
             // Check if JWT Token is being emitted properly
             jwtToken.collect { token ->
                 Log.d("UserViewModel", "JWT Token collected: $token")
+
+                if (!token.isNullOrBlank()) {
+                    fetchUserInfo(token)
+                }
             }
         }
         // Fetch user data after initialization
-        viewModelScope.launch {
-            setUser()
-        }
+//        viewModelScope.launch {
+//            setUser()
+//        }
     }
     fun fetchUserInfo(token: String) {
         viewModelScope.launch {

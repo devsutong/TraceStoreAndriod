@@ -125,6 +125,11 @@ interface TraceStoreAPI {
         @Header("Authorization") token: String
     ): Response<SellerOrdersResponseWrapper>
 
-
+    @PUT("order/seller/orders/{orderId}/status")
+    suspend fun updateOrderStatus(
+        @Header("Authorization") token: String,
+        @Path("orderId") orderId: Int,
+        @Body body: Map<String, String>
+    ): Response<Unit>
 }
 
