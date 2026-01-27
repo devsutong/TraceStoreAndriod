@@ -2,6 +2,7 @@ package com.sutonglabs.tracestore.viewmodels
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sutonglabs.tracestore.models.User
@@ -120,4 +121,27 @@ class UserViewModel @Inject constructor(
     fun resetUpdateState() {
         _updateState.value = null
     }
+    private val _isSyncing = MutableStateFlow(false)
+    val isSyncing: StateFlow<Boolean> = _isSyncing
+
+    // Inside UserViewModel.kt
+    private val _errorState = MutableStateFlow<String?>(null)
+    val errorState: StateFlow<String?> = _errorState
+
+    fun syncAndRegister() {
+        val token = jwtToken.value
+        if (token.isNullOrEmpty()) return
+
+        viewModelScope.launch {
+            val result = userRepository.syncUserToBlockchain(token)
+
+            result.onSuccess { updatedUser ->
+                _userInfo.value = updatedUser
+            }.onFailure {
+                // We set a simple error flag or just rely on the UI logic
+                _userInfo.value = _userInfo.value?.copy(blockchainStatus = false)
+            }
+        }
+    }
+
 }

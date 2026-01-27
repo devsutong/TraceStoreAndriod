@@ -55,6 +55,9 @@ fun ProfileScreen(
                 .padding(8.dp)
         )
 
+        val isBlockchainVerified = userInfo?.blockchainStatus?: false;
+
+
         // User Info Card
         Card(
             modifier = Modifier
@@ -72,10 +75,22 @@ fun ProfileScreen(
                 ProfileDetailRow("First Name", userInfo?.firstName ?: "Not Available")
                 ProfileDetailRow("Last Name", userInfo?.lastName ?: "Not Available")
                 ProfileDetailRow("Age", userInfo?.age?.toString() ?: "Not Available")
+                ProfileDetailRow("Blockchain verified:", if(isBlockchainVerified) "Verified" else "Not Verified")
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Inside UserViewModel.kt
+        if (!isBlockchainVerified) {
+            Button(
+                onClick = { userViewModel.syncAndRegister() },
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(text = "Sync Blockchain Status", fontSize = 18.sp)
+            }
+        }
 
         // Back Button
         Button(

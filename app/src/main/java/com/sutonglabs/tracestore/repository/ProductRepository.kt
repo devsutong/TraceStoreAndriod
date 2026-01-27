@@ -12,6 +12,8 @@ interface ProductRepository {
     suspend fun getProductDetail(id: Int, context: Context): Product?
     suspend fun addProduct(product: ProductCreate, context: Context): Product?  // Accept context for JWT token
     suspend fun uploadImage(image: MultipartBody.Part): ImageUploadResponse?
+
+    suspend fun syncProductToBlockchain(productId: Int, context: Context): Product?
 }
 
 

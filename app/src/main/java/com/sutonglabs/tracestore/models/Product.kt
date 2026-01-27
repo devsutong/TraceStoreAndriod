@@ -7,7 +7,8 @@ data class Product(
     var image: String = "",
     val price: Int = 0,
     val priceUnit: String = "inr", // Price unit like USD, INR, etc.
-    val categoryIds: List<Int> = emptyList() // List of category IDs
+    val categoryIds: List<Int> = emptyList(), // List of category IDs
+    val blockchainStatus: Boolean = false
 )
 
 

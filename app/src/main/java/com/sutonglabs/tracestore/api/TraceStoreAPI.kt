@@ -131,5 +131,16 @@ interface TraceStoreAPI {
         @Path("orderId") orderId: Int,
         @Body body: Map<String, String>
     ): Response<Unit>
+
+    @POST("user/sync-blockchain")
+    suspend fun syncUserToBlockchain(
+        @Header("Authorization") token: String
+    ): Response<UserResponse>
+
+    @POST("product/sync-blockchain/{productId}")
+    suspend fun syncProductToBlockchain(
+        @Header("Authorization") token: String,
+        @Path("productId") productId: Int
+    ): Response<ProductDetailResponse>
 }
 

@@ -41,7 +41,8 @@ class UserRepository @Inject constructor(
                 role = apiUser.role ?: "User",
                 gstin = apiUser.gstin,
                 createdAt = apiUser.createdAt,
-                updatedAt = apiUser.updatedAt
+                updatedAt = apiUser.updatedAt,
+                blockchainStatus = apiUser.blockchainStatus,
             )
 
             return Result.success(mappedUser)
@@ -106,6 +107,23 @@ class UserRepository @Inject constructor(
         } else {
             Log.d("UserRepository", "Failed to update user profile")
             Result.failure(Exception("Update failed"))
+        }
+    }
+
+    suspend fun syncUserToBlockchain(token: String): Result<User> {
+        return try {
+            // Change '.' to 'apiService' and ensure it calls the right method
+            val response = apiService.syncUserToBlockchain("Bearer $token")
+
+            if (response.isSuccessful && response.body() != null) {
+                // Note: If your API returns a wrapper, you must extract the 'data'
+                val updatedUser = response.body()!!.data
+                Result.success(updatedUser)
+            } else {
+                Result.failure(Exception("Sync Failed: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 

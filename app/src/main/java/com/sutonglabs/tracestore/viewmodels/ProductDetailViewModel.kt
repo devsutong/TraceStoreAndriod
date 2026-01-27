@@ -17,10 +17,13 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.sutonglabs.tracestore.repository.ProductRepository
+
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
     private val getProductDetailUseCase: GetProductDetailUseCase,
-    private val cartRepository: CartRepository // Injected CartRepository
+    private val cartRepository: CartRepository, // Injected CartRepository
+    private val productRepository: ProductRepository //Injected productRepository
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ProductDetailState())
@@ -63,6 +66,32 @@ class ProductDetailViewModel @Inject constructor(
                 Toast.makeText(context, "Item added to cart!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e("ProductDetailViewModel", "Error adding product to cart: ${e.message}")
+            }
+        }
+    }
+
+    fun syncProductToBlockchain(productId: Int, context: Context) {
+        viewModelScope.launch {
+            try {
+                // Call the repository function you created in the last step
+                val updatedProduct = productRepository.syncProductToBlockchain(productId, context)
+
+                if (updatedProduct != null) {
+                    // Update the UI state with the fresh data from the server
+                    // This triggers recomposition and hides the "Sync" button
+                    _state.value = _state.value.copy(
+                        productDetail = updatedProduct,
+                        isLoading = false
+                    )
+                    Toast.makeText(context, "Product Synced to Ledger!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Sync Failed", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e("ProductDetailViewModel", "Sync Error: ${e.message}")
+                _state.value = _state.value.copy(
+                    errorMessage = "Blockchain Sync Error: ${e.localizedMessage}"
+                )
             }
         }
     }

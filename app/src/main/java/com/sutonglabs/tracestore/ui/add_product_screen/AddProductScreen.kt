@@ -40,10 +40,10 @@ fun AddProductScreen(
     var expanded by remember { mutableStateOf(false) }
 
     val categories = listOf(
-        Category(1, "Food Crops"),
-        Category(2, "Clothing"),
-        Category(3, "Books"),
-        Category(4, "Furniture")
+        Category(2, "2"),
+        Category(3, "3"),
+//      Category(3, "Books"),
+//      Category(4, "Furniture")
     )
 
     val addProductStatus = addProductViewModel.addProductStatus.value

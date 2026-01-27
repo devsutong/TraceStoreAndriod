@@ -10,7 +10,8 @@ data class User(
     val role: String = "",
     val gstin: String? = null,
     val createdAt: String = "",
-    val updatedAt: String = ""
+    val updatedAt: String = "",
+    val blockchainStatus: Boolean,
 )
 
 data class LoginUser(

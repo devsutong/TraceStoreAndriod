@@ -61,12 +61,38 @@ fun ProductDetailScreen(
                         .padding(bottom = 16.dp),
                     contentScale = ContentScale.Crop
                 )
+
+                val isVerified = product.blockchainStatus
+                Text(
+                    text = if (isVerified) "Blockchain: Verified ✅" else "Blockchain: Not Synced ❌",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (isVerified) androidx.compose.ui.graphics.Color(0xFF4CAF50) else androidx.compose.ui.graphics.Color.Red
+                )
+                Log.d("ProductDetailScreen", "Current state: $state")
+
+
                 Text(text = product.name, style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = product.description, style = MaterialTheme.typography.bodyLarge)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "${product.price} INR", style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Only show this if the product isn't on the ledger yet
+                if (!isVerified) {
+                    Button(
+                        onClick = {
+                            // This function needs to be added to your ProductDetailViewModel
+                            viewModel.syncProductToBlockchain(product.id, context)
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        shape = RoundedCornerShape(CornerSize(8.dp)),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Text("Sync to Blockchain")
+                    }
+                }
+
                 Button(
                     onClick = {
                         viewModel.addToCart(product.id, context)

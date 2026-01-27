@@ -83,5 +83,29 @@ class ProductRepositoryImp @Inject constructor(
         }
         return null
     }
+    // Inside ProductRepository.kt
+
+    override suspend fun syncProductToBlockchain(productId: Int, context: Context): Product? {
+        val token = getJwtToken(context).first()
+        return withContext(Dispatchers.IO) {
+            try {
+                // Ensure this API call returns Response<ProductDetailResponse>
+                val response = traceStoreApiService.syncProductToBlockchain("Bearer $token", productId)
+
+                if (response.isSuccessful) {
+                    // response.body() is ProductDetailResponse
+                    // .data is the Product object
+                    val productDetailResponse = response.body()
+                    return@withContext productDetailResponse?.data
+                } else {
+                    Log.e("ProductRepository", "Sync failed: ${response.errorBody()?.string()}")
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("ProductRepository", "Exception during sync: ${e.localizedMessage}")
+                null
+            }
+        }
+    }
 }
 
