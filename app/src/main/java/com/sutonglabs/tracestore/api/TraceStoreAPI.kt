@@ -142,5 +142,8 @@ interface TraceStoreAPI {
         @Header("Authorization") token: String,
         @Path("productId") productId: Int
     ): Response<ProductDetailResponse>
+
+    @GET("category/fetch-categories")
+    suspend fun getCategories(): List<Category>
 }
 

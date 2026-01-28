@@ -25,6 +25,17 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import androidx.compose.ui.unit.dp
 import com.sutonglabs.tracestore.models.ProductCreate
 
+import com.sutonglabs.tracestore.viewmodels.CategoryViewModel
+import com.sutonglabs.tracestore.repository.CategoryRepository
+import com.sutonglabs.tracestore.services.RetrofitInstance
+import androidx.compose.foundation.layout.*
+
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.ui.unit.dp
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreen(
@@ -39,12 +50,15 @@ fun AddProductScreen(
     var selectedCategory by remember { mutableStateOf<Category?>(null) }
     var expanded by remember { mutableStateOf(false) }
 
-    val categories = listOf(
-        Category(2, "2"),
-        Category(3, "3"),
-//      Category(3, "Books"),
-//      Category(4, "Furniture")
-    )
+//    val categories = listOf(
+//        Category(2, "2"),
+//        Category(3, "3"),
+//        Category(3, "Books"),
+//        Category(4, "Furniture")
+//    )
+
+    val categoryViewModel: CategoryViewModel = viewModel()
+    val categories = categoryViewModel.categories
 
     val addProductStatus = addProductViewModel.addProductStatus.value
     val context = LocalContext.current
@@ -105,7 +119,10 @@ fun AddProductScreen(
 
             ExposedDropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .heightIn(max = 168.dp) // 3 items
+                    .verticalScroll(rememberScrollState())
             ) {
                 categories.forEach { category ->
                     DropdownMenuItem(
@@ -117,6 +134,7 @@ fun AddProductScreen(
                     )
                 }
             }
+
         }
 
         Button(
