@@ -15,28 +15,28 @@ class DemoDB @Inject constructor() {
                 name = "Wireless Controller for PS4™",
                 description = description,
                 image = "ggg",
-                price = 79,
+                price = 79.0,
                 ),
             Product(
                 id = 1,
                 name = "Nike Sport White - Man Pant",
                 description = description,
                 image = "ggg",
-                price = 433,
+                price = 433.0,
             ),
             Product(
                 id = 1,
                 name = "Gloves XC Omega - Polygon",
                 description = description,
                 image = "ggg",
-                price = 43,
+                price = 43.0,
             ),
             Product(
                 id = 1,
                 name = "Gloves XC Omega - Polygon",
                 description = description,
                 image = "ggg",
-                price = 34,
+                price = 34.0,
             )
             )
 

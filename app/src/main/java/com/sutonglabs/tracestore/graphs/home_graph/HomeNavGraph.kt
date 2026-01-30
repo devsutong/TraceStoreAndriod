@@ -21,6 +21,7 @@ import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerDashboardScree
 import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerProductListScreen
 import com.sutonglabs.tracestore.ui.update_profile_screen.UpdateProfileScreen
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
+import com.sutonglabs.tracestore.graphs.search_graph.searchNavGraph
 
 @Composable
 fun HomeNavGraph(
@@ -86,6 +87,7 @@ fun HomeNavGraph(
         // detail and cart graphs
         detailNavGraph(navController = navHostController)
         cartNavGraph(navController = navHostController)
+        searchNavGraph(navController = navHostController)
 
 
     }

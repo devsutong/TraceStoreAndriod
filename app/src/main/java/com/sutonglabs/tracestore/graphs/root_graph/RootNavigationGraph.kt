@@ -10,6 +10,8 @@ import com.sutonglabs.tracestore.graphs.auth_graph.authNavGraph
 import com.sutonglabs.tracestore.ui.home_screen.HomeScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
 import com.sutonglabs.tracestore.graphs.home_graph.HomeNavGraph
+import com.sutonglabs.tracestore.graphs.search_graph.searchNavGraph
+
 @Composable
 fun RootNavigationGraph(
     navHostController: NavHostController,
@@ -39,7 +41,7 @@ fun RootNavigationGraph(
         // Authentication navigation graph
         authNavGraph(navHostController, context, productRepository) // Pass productRepository here
 
-
+        searchNavGraph(navHostController)
 
         // Home screen
         composable(route = Graph.HOME) {

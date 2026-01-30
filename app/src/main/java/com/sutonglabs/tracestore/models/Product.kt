@@ -5,7 +5,7 @@ data class Product(
     val name: String = "",
     val description: String = "",
     var image: String = "",
-    val price: Int = 0,
+    val price: Double = 0.0,
     val priceUnit: String = "inr", // Price unit like USD, INR, etc.
     val categoryIds: List<Int> = emptyList(), // List of category IDs
     val blockchainStatus: Boolean = false

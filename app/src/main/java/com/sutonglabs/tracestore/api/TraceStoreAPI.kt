@@ -18,6 +18,7 @@ import com.sutonglabs.tracestore.models.CartResponse
 import com.sutonglabs.tracestore.models.ProductResponse
 import com.sutonglabs.tracestore.models.ProductDetailResponse
 import kotlinx.coroutines.flow.first
+import com.sutonglabs.tracestore.api.response_model.SearchResponse
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.http.Body
@@ -145,5 +146,13 @@ interface TraceStoreAPI {
 
     @GET("category/fetch-categories")
     suspend fun getCategories(): List<Category>
+
+    @GET("search")
+    suspend fun searchProducts(
+        @Query("q") query: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ): SearchResponse
+
 }
 

@@ -38,7 +38,6 @@ fun HomeScreen(
             AppBar(
                 navController = navController,
                 isVisible = topBarVisibilityState.value,
-                searchCharSequence = {},
                 onCartIconClick = {
                     navController.navigate(DetailScreen.CartScreen.route)
                 },
