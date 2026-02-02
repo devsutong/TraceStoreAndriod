@@ -63,6 +63,7 @@ fun NavigationBar(
             }
 
             // Add the "+" icon for navigating to AddProductScreen
+            // TODO: fix it inside the loop
             NavigationBarItem(
                 selected = false,
                 icon = {

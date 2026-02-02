@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,7 +37,7 @@ sealed class BottomNavItem(val title: String, val icon: ImageVector, val route: 
 
     object OrdersNav : BottomNavItem(
         title = "Orders",
-        icon = Icons.Filled.ShoppingCart, // Using a cart icon for order
+        icon = Icons.Filled.Inventory, // Using a cart icon for order
         route = ShopHomeScreen.OrderScreen.route
     )
 }

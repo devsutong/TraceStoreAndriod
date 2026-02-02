@@ -25,14 +25,14 @@ fun SplashScreen(navController: NavController) {
     val splashImageList = listOf(
         R.drawable.placeholder,
     )
-    LaunchedEffect(Unit) {
-        delay(1000)
-        navController.navigate(AuthScreen.SignInScreen.route) {
-            popUpTo(AuthScreen.OnBoardingScreen.route) {
-                inclusive = true
-            }
-        }
-    }
+//    LaunchedEffect(Unit) {
+//        delay(30000)
+//        navController.navigate(AuthScreen.SignInScreen.route) { // AuthScreen.SignInScreen.route
+//            popUpTo(AuthScreen.OnBoardingScreen.route) {
+//                inclusive = true
+//            }
+//        }
+//    }
     val currentPosition = remember { mutableIntStateOf(0) }
     Column(
         modifier = Modifier

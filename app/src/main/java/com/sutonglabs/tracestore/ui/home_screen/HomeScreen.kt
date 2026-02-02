@@ -18,6 +18,8 @@ import com.sutonglabs.tracestore.graphs.detail_graph.DetailScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
 import com.sutonglabs.tracestore.ui.home_screen.components.NavigationBar
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.sutonglabs.tracestore.viewmodels.CategoryViewModel
 
 @Composable
 fun HomeScreen(
@@ -32,12 +34,15 @@ fun HomeScreen(
     // Obtain UserViewModel instance via Hilt
     val userViewModel: UserViewModel = hiltViewModel()
 
+    val categoryViewModel: CategoryViewModel = hiltViewModel()
+
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             AppBar(
                 navController = navController,
                 isVisible = topBarVisibilityState.value,
+                categories = categoryViewModel.categories,
                 onCartIconClick = {
                     navController.navigate(DetailScreen.CartScreen.route)
                 },

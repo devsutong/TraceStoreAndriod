@@ -1,7 +1,6 @@
 package com.sutonglabs.tracestore.graphs.home_graph
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,6 +21,7 @@ import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerProductListScr
 import com.sutonglabs.tracestore.ui.update_profile_screen.UpdateProfileScreen
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
 import com.sutonglabs.tracestore.graphs.search_graph.searchNavGraph
+import com.sutonglabs.tracestore.graphs.category_products_graph.categoryProductsNavGraph
 
 @Composable
 fun HomeNavGraph(
@@ -87,7 +87,10 @@ fun HomeNavGraph(
         // detail and cart graphs
         detailNavGraph(navController = navHostController)
         cartNavGraph(navController = navHostController)
+
         searchNavGraph(navController = navHostController)
+
+        categoryProductsNavGraph(navController = navHostController)
 
 
     }

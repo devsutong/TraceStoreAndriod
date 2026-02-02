@@ -154,5 +154,9 @@ interface TraceStoreAPI {
         @Query("limit") limit: Int
     ): SearchResponse
 
+    @GET("product/")
+    suspend fun getProductsByCategory(
+        @Query("cat") categoryId: Int
+    ): Response<ProductResponse>
 }
 
