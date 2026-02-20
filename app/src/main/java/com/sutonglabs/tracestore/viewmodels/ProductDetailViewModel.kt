@@ -59,7 +59,7 @@ class ProductDetailViewModel @Inject constructor(
                     return@launch
                 }
 
-                cartRepository.addToCart(productId, token)
+                cartRepository.addToCart(productId)
                 Log.d("ProductDetailViewModel", "Product added to cart successfully")
 
                 // Show Toast after successfully adding the product
@@ -73,28 +73,35 @@ class ProductDetailViewModel @Inject constructor(
     fun syncProductToBlockchain(productId: Int, context: Context) {
         viewModelScope.launch {
             try {
-                // Call the repository function you created in the last step
-                val updatedProduct = productRepository.syncProductToBlockchain(productId, context)
 
-                if (updatedProduct != null) {
-                    // Update the UI state with the fresh data from the server
-                    // This triggers recomposition and hides the "Sync" button
+                val result = productRepository.syncProductToBlockchain(productId)
+
+                if (result != null) {
+
+                    // 🔥 REFRESH FULL PRODUCT
+                    val refreshedProduct =
+                        productRepository.getProductDetail(productId)
+
                     _state.value = _state.value.copy(
-                        productDetail = updatedProduct,
+                        productDetail = refreshedProduct,
                         isLoading = false
                     )
-                    Toast.makeText(context, "Product Synced to Ledger!", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Sync Failed", Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(
+                        context,
+                        "Product Synced to Ledger!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
             } catch (e: Exception) {
-                Log.e("ProductDetailViewModel", "Sync Error: ${e.message}")
                 _state.value = _state.value.copy(
-                    errorMessage = "Blockchain Sync Error: ${e.localizedMessage}"
+                    errorMessage = e.message ?: "Sync failed"
                 )
             }
         }
     }
+
 
 
 

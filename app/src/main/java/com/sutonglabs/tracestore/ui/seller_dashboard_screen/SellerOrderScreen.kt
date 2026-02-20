@@ -27,11 +27,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.sutonglabs.tracestore.common.Constants
 import com.sutonglabs.tracestore.models.SellerOrderItem
 import com.sutonglabs.tracestore.models.SellerOrderResponse
+import com.sutonglabs.tracestore.ui.common.ProductCardImage
 import com.sutonglabs.tracestore.viewmodels.OrderViewModel
 
 @Composable
@@ -174,19 +176,23 @@ fun ProductItemView(
             .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = rememberImagePainter(Constants.BASE_URL + item.product.image),
-            contentDescription = item.product.name,
-            modifier = Modifier
-                .size(60.dp)
-                .padding(end = 12.dp),
-            contentScale = ContentScale.Crop
+
+        //Reusable
+        ProductCardImage(
+            product = item.product,
+            height = 60.dp,
         )
 
-        Column {
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = item.product.name,
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium)
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Medium
+                )
             )
             Text(
                 text = "Quantity: ${item.quantity}",

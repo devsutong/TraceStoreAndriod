@@ -43,14 +43,14 @@ fun EditAddressScreen(
 
             // Use mutable states for each field. Pre-populate with current address values.
             val addressId by remember { mutableIntStateOf(address.id) }
-            var name by remember { mutableStateOf(address.name ?: "") }
-            var phoneNumber by remember { mutableStateOf(address.phoneNumber ?: "") }
-            var pincode by remember { mutableStateOf(address.pincode ?: "") }
-            var city by remember { mutableStateOf(address.city ?: "") }
-            var stateName by remember { mutableStateOf(address.state ?: "") }
-            var locality by remember { mutableStateOf(address.locality ?: "") }
-            var buildingName by remember { mutableStateOf(address.buildingName ?: "") }
-            var landmark by remember { mutableStateOf(address.landmark ?: "") }
+            var name by remember { mutableStateOf(address.name ?: "Satya ") }
+            var phoneNumber by remember { mutableStateOf(address.phoneNumber ?: "9876543210") }
+            var pincode by remember { mutableStateOf(address.pincode ?: "781022") }
+            var city by remember { mutableStateOf(address.city ?: "Guwahati") }
+            var stateName by remember { mutableStateOf(address.state ?: "Assam") }
+            var locality by remember { mutableStateOf(address.locality ?: "Beltola") }
+            var buildingName by remember { mutableStateOf(address.buildingName ?: "Shiv Residency") }
+            var landmark by remember { mutableStateOf(address.landmark ?: "Near Beltola Bazaar") }
 
             Column(
                 modifier = Modifier

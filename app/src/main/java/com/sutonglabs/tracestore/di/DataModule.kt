@@ -1,6 +1,8 @@
 package com.sutonglabs.tracestore.di
 
+import android.content.Context
 import com.sutonglabs.tracestore.api.TraceStoreAPI
+import com.sutonglabs.tracestore.data.auth.TokenProvider
 import com.sutonglabs.tracestore.repository.AddressRepository
 import com.sutonglabs.tracestore.repository.AddressRepositoryImp
 import com.sutonglabs.tracestore.repository.CartRepository
@@ -12,6 +14,7 @@ import com.sutonglabs.tracestore.repository.ProductRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -20,17 +23,22 @@ import javax.inject.Singleton
 object DataModule {
     @Provides
     @Singleton
-    fun provideProductRepository(traceStoreAPIService: TraceStoreAPI): ProductRepository {
-        return ProductRepositoryImp(traceStoreAPIService)
+    fun provideProductRepository(
+        traceStoreAPIService: TraceStoreAPI,
+        tokenProvider: TokenProvider
+    ): ProductRepository {
+        return ProductRepositoryImp(traceStoreAPIService, tokenProvider)
     }
+
 
     @Provides
     fun provideCartRepository(
-        // Add dependencies if necessary, e.g., DAOs, Retrofit services, etc.
-        traceStoreAPIService: TraceStoreAPI
+        traceStoreAPIService: TraceStoreAPI,
+        @ApplicationContext context: Context
     ): CartRepository {
-        return CartRepositoryImp(traceStoreAPIService)
+        return CartRepositoryImp(traceStoreAPIService, context)
     }
+
 
     @Provides
     fun provideAddressRepository(

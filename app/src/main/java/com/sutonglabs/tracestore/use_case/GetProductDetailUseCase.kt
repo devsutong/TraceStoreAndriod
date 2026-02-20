@@ -17,7 +17,7 @@ class GetProductDetailUseCase @Inject constructor(
 
         try {
             // Fetch product details from the repository
-            val product = productRepository.getProductDetail(id, context)
+            val product = productRepository.getProductDetail(id)
 
             // Emit success state with the fetched product
             if (product != null) {

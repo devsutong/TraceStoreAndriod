@@ -1,6 +1,7 @@
 package com.sutonglabs.tracestore.viewmodels
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,30 +13,37 @@ import com.sutonglabs.tracestore.models.ImageUploadResponse
 import com.sutonglabs.tracestore.models.ProductCreate
 import kotlinx.coroutines.runBlocking
 import okhttp3.MultipartBody
+import com.sutonglabs.tracestore.viewmodels.state.AddProductState
 
-class AddProductViewModel(private val productRepository: ProductRepository) : ViewModel() {
+class AddProductViewModel(
+    private val productRepository: ProductRepository
+) : ViewModel() {
 
-    private val _addProductStatus = mutableStateOf<Boolean?>(null)
-    val addProductStatus: State<Boolean?> = _addProductStatus
+    private val _state = mutableStateOf<AddProductState>(AddProductState.Idle)
+    val state: State<AddProductState> = _state
 
-    fun addProduct(product: ProductCreate, context: Context) {
+    fun createProduct(
+        context: Context,
+        product: ProductCreate,
+        imageUris: List<Uri>
+    ) {
         viewModelScope.launch {
-            val result = productRepository.addProduct(product, context) // Pass context to repository
-            _addProductStatus.value = result != null
-        }
-    }
-
-
-    // New method to upload an image and create a product with the uploaded image path
-    fun uploadImage(image: MultipartBody.Part): ImageUploadResponse? {
-        return runBlocking {
+            _state.value = AddProductState.Loading
             try {
-                val imageUploadResponse = productRepository.uploadImage(image)
-                return@runBlocking imageUploadResponse
+                val uploadResponse =
+                    productRepository.uploadImages(context, imageUris)
+
+                val finalProduct =
+                    product.copy(image_uuids = uploadResponse.image_uuids)
+
+                productRepository.addProduct(finalProduct)
+                _state.value = AddProductState.Success
+
             } catch (e: Exception) {
-                Log.e("AddProductViewModel", "Error uploading image: ${e.localizedMessage}")
-                return@runBlocking null
+                _state.value =
+                    AddProductState.Error(e.message ?: "Something went wrong")
             }
         }
     }
+
 }

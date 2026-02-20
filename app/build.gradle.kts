@@ -119,6 +119,9 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.2")
     implementation("com.google.mlkit:barcode-scanning:17.0.3")
 
+    //Image preview grid
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
 }
 
 // Allow references to generated code

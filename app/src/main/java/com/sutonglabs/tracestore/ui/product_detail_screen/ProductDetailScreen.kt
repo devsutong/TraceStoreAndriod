@@ -16,6 +16,7 @@ import com.sutonglabs.tracestore.viewmodels.ProductDetailViewModel
 import com.sutonglabs.tracestore.common.Constants
 import android.content.Context
 import android.util.Log
+import com.sutonglabs.tracestore.ui.common.ProductImageCarousel
 
 @Composable
 fun ProductDetailScreen(
@@ -52,17 +53,10 @@ fun ProductDetailScreen(
         } else {
             state.productDetail?.let { product ->
 
-                Image(
-                    painter = rememberImagePainter(Constants.BASE_URL + product.image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                        .padding(bottom = 16.dp),
-                    contentScale = ContentScale.Crop
-                )
+                ProductImageCarousel(images = product.images)
 
-                val isVerified = product.blockchainStatus
+                val isVerified = product.productBlockchainStatus?.blockchainStatus == true
+
                 Text(
                     text = if (isVerified) "Blockchain: Verified ✅" else "Blockchain: Not Synced ❌",
                     style = MaterialTheme.typography.bodySmall,
@@ -79,6 +73,7 @@ fun ProductDetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Only show this if the product isn't on the ledger yet
+                //TODO: GLITCH WHEN I CLICK ON BLOCKCHAIN STATUS BUTTON, IMAGE DISSAPEARS AND IT DOESNOT UPDATES
                 if (!isVerified) {
                     Button(
                         onClick = {

@@ -1,5 +1,6 @@
 package com.sutonglabs.tracestore.api
 
+import com.sutonglabs.tracestore.models.CartResponse
 import com.sutonglabs.tracestore.models.*
 import okhttp3.MultipartBody
 import com.sutonglabs.tracestore.api.request_models.CreateAddressRequest
@@ -12,7 +13,6 @@ import com.sutonglabs.tracestore.api.response_model.OrdersResponse
 import com.sutonglabs.tracestore.api.response_model.UpdateAddressResponse
 import com.sutonglabs.tracestore.models.AddToCartRequest
 import com.sutonglabs.tracestore.models.AddressResponse
-import com.sutonglabs.tracestore.models.CartResponse
 import com.sutonglabs.tracestore.models.ProductResponse
 import com.sutonglabs.tracestore.models.ProductDetailResponse
 import com.sutonglabs.tracestore.api.response_model.SearchResponse
@@ -63,7 +63,7 @@ interface TraceStoreAPI {
     ): Response<UserResponse>
 
     @GET("cart")
-    fun getCart(@Header("Authorization") token: String): Call<CartResponse>
+    suspend fun getCart(@Header("Authorization") token: String): CartResponse
 
     @GET("address")
     fun getAddress(@Header("Authorization") token: String): Call<AddressResponse>
@@ -84,7 +84,7 @@ interface TraceStoreAPI {
     suspend fun addToCart(
         @Body request: AddToCartRequest,
         @Header("Authorization") token: String
-    ): Response<CartResponse>
+    ): CartResponse
 
     @POST("order")
     suspend fun createOrder(
@@ -101,17 +101,27 @@ interface TraceStoreAPI {
     suspend fun updateCartItem(
         @Header("Authorization") token: String,
         @Body request: UpdateCartRequest
-    ): Response<CartResponse>
+    ): UpdateCartResponse
 
     @POST("product/")
     suspend fun addProduct(
         @Header("Authorization") authHeader: String,  // Add Authorization header
         @Body product: ProductCreate
-    ): Response<Product>
+    ): Response<ProductDetailResponse>
 
     @Multipart
-    @POST("upload/image")
-    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<ImageUploadResponse>
+    @POST("upload/image/product")
+    suspend fun uploadProductImages(
+        @Header("Authorization") token: String,
+        @Part images: List<MultipartBody.Part>
+    ): Response<ImageUploadResponse>
+
+    @Multipart
+    @POST("upload/image/profile")
+    suspend fun uploadProfileImage(
+        @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part
+    ): Response<ImageUploadResponse>
 
     @GET("/product/user/products")
     suspend fun getUserProducts(

@@ -40,7 +40,7 @@ import androidx.compose.runtime.LaunchedEffect
 @Composable
 fun LoginScreen( navController: NavController, viewModel: UserViewModel = hiltViewModel()) {
     var username by remember { mutableStateOf("abc") }
-    var password by remember { mutableStateOf("123") }
+    var password by remember { mutableStateOf("123456") }
     var passwordVisibility by remember { mutableStateOf(false) }
 
     var showErrorDialog by remember { mutableStateOf(false) }

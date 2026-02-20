@@ -1,7 +1,7 @@
 package com.sutonglabs.tracestore.models
 
 data class ImageUploadResponse(
+    val status: Boolean,
     val message: String,
-    val filename: String,
-    val path: String
+    val image_uuids : List<String>
 )

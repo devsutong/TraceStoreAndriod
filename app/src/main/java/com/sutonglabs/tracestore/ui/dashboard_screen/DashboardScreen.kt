@@ -1,6 +1,5 @@
 package com.sutonglabs.tracestore.ui.dashboard_screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,13 +24,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
 import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.viewmodels.DashboardViewModel
-import com.sutonglabs.tracestore.common.Constants
+import com.sutonglabs.tracestore.ui.common.ProductCardImage
 
 @Composable
 fun DashboardScreen(
@@ -115,14 +112,9 @@ fun ProductCard(product: Product, onItemClick: (Int) -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column {
-            Image(
-                painter = rememberImagePainter(Constants.BASE_URL + product.image),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp), // scaled down image height
-                contentScale = ContentScale.Crop
-            )
+            //Image section
+            ProductCardImage(product = product, height = 100.dp)
+
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = product.name,
@@ -150,14 +142,9 @@ fun MoreProductCard(product: Product, onItemClick: (Int) -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column {
-            Image(
-                painter = rememberImagePainter(Constants.BASE_URL + product.image),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp), // scaled down image height
-                contentScale = ContentScale.Crop
-            )
+
+            ProductCardImage(product = product, height = 100.dp)
+
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = product.name,

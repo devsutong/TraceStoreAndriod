@@ -18,11 +18,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.sutonglabs.tracestore.api.response_model.Order
 import com.sutonglabs.tracestore.api.response_model.OrderItem
 import com.sutonglabs.tracestore.common.Constants
+import com.sutonglabs.tracestore.ui.common.ProductCardImage
 import com.sutonglabs.tracestore.viewmodels.OrderViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,13 +106,12 @@ fun OrderItemRow(item: OrderItem) {
             modifier = Modifier.padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Load product image
-            Image(
-                painter = rememberImagePainter(Constants.BASE_URL + item.Product.image),
+            //todo: make it reusable
+            AsyncImage(
+                model = item.Product.image,
                 contentDescription = item.Product.name,
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(MaterialTheme.shapes.medium),
+                    .size(80.dp),
                 contentScale = ContentScale.Crop
             )
 

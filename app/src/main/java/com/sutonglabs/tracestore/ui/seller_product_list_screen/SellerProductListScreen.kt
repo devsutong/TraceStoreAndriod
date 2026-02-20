@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.services.RetrofitInstance
+import com.sutonglabs.tracestore.ui.common.ProductCardImage
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,6 +108,7 @@ fun ProductCard(product: Product, onClick: () -> Unit) {
         shape = MaterialTheme.shapes.medium
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            ProductCardImage(product = product, height = 150.dp)
             Text(text = product.name, style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = product.description, style = MaterialTheme.typography.bodyMedium)

@@ -236,29 +236,32 @@ fun AddressCard(
 }
 
 @SuppressLint("SuspiciousIndentation")
-fun generateCreateOrderRequest(cartViewModel: CartViewModel, addressID: Int): CreateOrderRequest? {
-    val products = cartViewModel.state.value.product?.map {
+fun generateCreateOrderRequest(
+    cartViewModel: CartViewModel,
+    addressID: Int
+): CreateOrderRequest? {
+
+    val items = cartViewModel.state.value.items
+
+    if (items.isEmpty()) return null
+
+    val products = items.map {
         Product(
-            productID = it.product.id,  // Use 'it.product.id' to match DB ID
+            productID = it.product.id,
             quantity = it.quantity
         )
     }
 
-    products?.forEach {
-        Log.d("CheckoutDebug", "Sending productID: ${it.productID}, quantity: ${it.quantity}")
+    val totalAmount = items.sumOf {
+        it.product.price.toDouble() * it.quantity.toDouble()
     }
 
-    val totalAmount = cartViewModel.state.value.product?.sumOf {
-        (it.product.price.toDouble()) * it.quantity.toDouble()
-    } ?: 0.0
-
-    return products?.let {
-        CreateOrderRequest(
-            products = it,
-            totalAmount = totalAmount,
-            addressID = addressID,
-            status = "Success"
-        )
-    }
+    return CreateOrderRequest(
+        products = products,
+        totalAmount = totalAmount,
+        addressID = addressID,
+        status = "Success"
+    )
 }
+
 
