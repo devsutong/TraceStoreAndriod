@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.sutonglabs.tracestore.graphs.Graph
+import com.sutonglabs.tracestore.graphs.forgot_password_graph.forgotPasswordNavGraph
 import com.sutonglabs.tracestore.ui.home_screen.HomeScreen
 import com.sutonglabs.tracestore.ui.login.LoginScreen
 import com.sutonglabs.tracestore.ui.onboarding_screen.SplashScreen
@@ -69,5 +70,7 @@ fun NavGraphBuilder.authNavGraph(
                 }
             },  productRepository = productRepository) // Pass productRepository here
         }
+
+        forgotPasswordNavGraph(navController)
     }
 }

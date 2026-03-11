@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sutonglabs.tracestore.graphs.auth_graph.AuthScreen
+import com.sutonglabs.tracestore.graphs.forgot_password_graph.ForgotPasswordRoutes
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
 
 /**
@@ -152,13 +153,18 @@ fun LoginScreen(navController: NavController, viewModel: UserViewModel = hiltVie
             Spacer(modifier = Modifier.height(8.dp)) // Add a small vertical space.
 
             // "Forgot Password?" Text.
-            Text(
-                text = "Forgot Password?",
-                modifier = Modifier.align(Alignment.End), // Align the text to the end of the row.
-                style = MaterialTheme.typography.labelLarge, // Use a small, bold text style.
-                color = MaterialTheme.colorScheme.primary, // Use the primary color for emphasis.
-                fontWeight = FontWeight.Bold
-            )
+            TextButton(
+                onClick = {
+                    navController.navigate(ForgotPasswordRoutes.FORGOT_PASSWORD)
+                },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(
+                    text = "Forgot Password?",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             Spacer(modifier = Modifier.height(32.dp)) // Add vertical space.
 
