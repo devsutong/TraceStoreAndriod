@@ -2,6 +2,7 @@ package com.sutonglabs.tracestore.di
 
 import com.sutonglabs.tracestore.api.TraceStoreAPI
 import com.sutonglabs.tracestore.common.Constants
+import com.sutonglabs.tracestore.services.AuthService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +27,11 @@ class NetworkModule {
     @Provides
     fun provideTraceStoreAPI(retrofit: Retrofit): TraceStoreAPI { // provides API service
         return retrofit.create(TraceStoreAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 }

@@ -139,7 +139,7 @@ class UserViewModel @Inject constructor(
                 _userInfo.value = updatedUser
             }.onFailure {
                 // We set a simple error flag or just rely on the UI logic
-                _userInfo.value = _userInfo.value?.copy(blockchainStatus = false)
+                _userInfo.value = _userInfo.value?.copy(blockchainStatus = 0)
             }
         }
     }

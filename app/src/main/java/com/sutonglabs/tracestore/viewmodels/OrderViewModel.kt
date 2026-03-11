@@ -31,6 +31,9 @@ class OrderViewModel @Inject constructor(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
+    
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     fun createOrder(orderRequest: CreateOrderRequest, context: Context) {
         viewModelScope.launch {
@@ -65,6 +68,7 @@ class OrderViewModel @Inject constructor(
 
     fun fetchSellerOrders(context: Context) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val response = orderRepository.getSellerOrders(context)
                 _sellerOrders.value = response
@@ -72,6 +76,8 @@ class OrderViewModel @Inject constructor(
             } catch (e: Exception) {
                 _errorMessage.value = e.message
                 Log.e("OrderViewModel", "Error fetching seller orders: ${e.message}")
+            } finally {
+                _isLoading.value = false
             }
         }
     }

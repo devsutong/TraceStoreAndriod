@@ -11,7 +11,7 @@ data class User(
     val gstin: String? = null,
     val createdAt: String = "",
     val updatedAt: String = "",
-    val blockchainStatus: Boolean,
+    val blockchainStatus: Int,
 )
 
 data class LoginUser(

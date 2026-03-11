@@ -15,9 +15,9 @@ import com.sutonglabs.tracestore.ui.favourite_screen.FavouriteScreen
 import com.sutonglabs.tracestore.ui.profile_screen.ProfileScreen
 import com.sutonglabs.tracestore.ui.order_screen.OrderScreen // Import your OrdersScreen
 import com.sutonglabs.tracestore.repository.ProductRepository
-import com.sutonglabs.tracestore.ui.seller.SellerOrdersScreen
+import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerOrdersScreen
 import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerDashboardScreen
-import com.sutonglabs.tracestore.ui.seller_dashboard_screen.SellerProductListScreen
+import com.sutonglabs.tracestore.ui.seller_product_list_screen.SellerProductListScreen
 import com.sutonglabs.tracestore.ui.update_profile_screen.UpdateProfileScreen
 import com.sutonglabs.tracestore.viewmodels.UserViewModel
 import com.sutonglabs.tracestore.graphs.search_graph.searchNavGraph
@@ -79,9 +79,14 @@ fun HomeNavGraph(
 
 
         composable("seller_orders_screen") {
-            SellerOrdersScreen(onProductClick = { productId ->
-                navHostController.navigate(DetailScreen.ProductDetailScreen.route + "/$productId")
-            })
+            SellerOrdersScreen(
+                onProductClick = { productId ->
+                    navHostController.navigate(DetailScreen.ProductDetailScreen.route + "/$productId")
+                },
+                onBackClick = {
+                    navHostController.popBackStack()
+                }
+            )
         }
 
         composable(ShopHomeScreen.QrScannerScreen.route) {

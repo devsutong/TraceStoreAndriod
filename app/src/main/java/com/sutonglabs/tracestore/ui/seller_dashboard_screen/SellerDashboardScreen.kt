@@ -3,20 +3,21 @@ package com.sutonglabs.tracestore.ui.seller_dashboard_screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.automirrored.filled.ReceiptLong
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun SellerDashboardScreen(navController: NavController) {
@@ -32,7 +33,8 @@ fun SellerDashboardScreen(navController: NavController) {
                 text = "Seller Dashboard",
                 style = MaterialTheme.typography.headlineMedium.copy(
                     color = Color(0xFF2E7D32), // Dark green
-                    fontSize = 28.sp
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold // Make title bold
                 ),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -41,7 +43,7 @@ fun SellerDashboardScreen(navController: NavController) {
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 24.dp), // Increased padding
                 thickness = 5.dp,
                 color = Color(0xFFB2DFDB)
             )
@@ -52,12 +54,13 @@ fun SellerDashboardScreen(navController: NavController) {
                 icon = Icons.Default.AddBox,
                 onClick = { navController.navigate("add_product_screen") }
             )
+            Spacer(modifier = Modifier.height(16.dp)) // Add space between cards
             DashboardCard(
                 title = "View Products",
                 icon = Icons.AutoMirrored.Filled.List,
                 onClick = { navController.navigate("seller_product_list") }
             )
-
+            Spacer(modifier = Modifier.height(16.dp)) // Add space between cards
 
             DashboardCard(
                 title = "View Orders",
@@ -65,6 +68,7 @@ fun SellerDashboardScreen(navController: NavController) {
                 onClick = { navController.navigate("seller_orders_screen")
                 }
             )
+            Spacer(modifier = Modifier.height(16.dp)) // Add space between cards
 
             DashboardCard(
                 title = "Payment History",
@@ -80,13 +84,13 @@ fun DashboardCard(title: String, icon: ImageVector, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(100.dp) // Consider making height dynamic if needed
             .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFE8F5E9) // Light green background
         ),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp) // Corrected elevation parameter
     ) {
         Row(
             modifier = Modifier
@@ -98,17 +102,16 @@ fun DashboardCard(title: String, icon: ImageVector, onClick: () -> Unit) {
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(36.dp), // Slightly larger icon
                 tint = Color(0xFF388E3C) // Green icon
             )
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(24.dp)) // Increased space
             Text(
                 text = title,
-                fontSize = 20.sp,
-                color = Color(0xFF2E7D32), // Darker green text
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.titleLarge.copy( // Using titleLarge for better hierarchy
+                    color = Color(0xFF2E7D32) // Darker green text
+                )
             )
         }
     }
 }
-

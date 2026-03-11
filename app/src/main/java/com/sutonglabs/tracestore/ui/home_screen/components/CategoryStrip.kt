@@ -1,14 +1,13 @@
 package com.sutonglabs.tracestore.ui.home_screen.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sutonglabs.tracestore.models.CategoryTree
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoryStrip(
     categories: List<CategoryTree>,
@@ -16,19 +15,17 @@ fun CategoryStrip(
 ) {
     if (categories.isEmpty()) return
 
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(1),
+    LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
-            .padding(start = 6.dp, top = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(categories.size) { index ->
+        items(categories) { category ->
             CategoryItem(
-                category = categories[index],
-                onClick = { onCategoryClick(categories[index]) }
+                category = category,
+                onClick = { onCategoryClick(category) }
             )
         }
     }
