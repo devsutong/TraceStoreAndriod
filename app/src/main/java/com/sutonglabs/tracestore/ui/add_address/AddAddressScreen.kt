@@ -27,12 +27,12 @@ fun AddAddressScreen(
     val loadingLocation by addressViewModel.isFetchingLocation
 
     // ✅ FORM STATE
-    var name by rememberSaveable { mutableStateOf("") }
-    var phoneNumber by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("SATYA") }
+    var phoneNumber by rememberSaveable { mutableStateOf("9801507928") }
     var pincode by rememberSaveable { mutableStateOf("") }
-    var locality by rememberSaveable { mutableStateOf("") }
-    var buildingName by rememberSaveable { mutableStateOf("") }
-    var landmark by rememberSaveable { mutableStateOf("") }
+    var locality by rememberSaveable { mutableStateOf("NONW") }
+    var buildingName by rememberSaveable { mutableStateOf("NONW") }
+    var landmark by rememberSaveable { mutableStateOf("NONW") }
 
     when {
 

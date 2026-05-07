@@ -8,34 +8,30 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import com.sutonglabs.tracestore.ui.home_screen.components.SearchBar
-import androidx.compose.runtime.saveable.rememberSaveable
-import com.google.android.material.search.SearchView
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sutonglabs.tracestore.graphs.search_graph.SearchRoute
 import com.sutonglabs.tracestore.graphs.subcategory_graph.SubcategoryRoute
 import com.sutonglabs.tracestore.models.CategoryTree
 import com.sutonglabs.tracestore.ui.home_screen.components.CategoryStrip
 import com.sutonglabs.tracestore.ui.home_screen.components.QrScannerButton
+import com.sutonglabs.tracestore.ui.home_screen.components.Search.SearchWithDropdown
+import com.sutonglabs.tracestore.viewmodels.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,11 +43,14 @@ fun AppBar(
     categories: List<CategoryTree>,
     ) {
 
-    var query by rememberSaveable { mutableStateOf("") }
-
     if (isVisible) {
+
+        val viewModel: SearchViewModel = hiltViewModel()
+
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding(),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Row(
@@ -112,36 +111,19 @@ fun AppBar(
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    SearchBar(
-                        value = query,
-                        onValueChange = { query = it },
-                        onSearchSubmit = {
-                            if (query.isNotBlank()) {
-                                navController.navigate(SearchRoute.Search.createRoute(query))
-                            }
-                            query = ""
+                    //SEARCH WITH DROPDOWN
+                    SearchWithDropdown(
+                        viewModel = viewModel,
+                        onSearchSubmit = { query ->
+                            navController.navigate(SearchRoute.Search.createRoute(query))
                         }
                     )
-
                 }
 
                 QrScannerButton(
                     navController = navController
                 )
             }
-
-//            CategoryStrip(
-//                categories = categories,
-//                onCategoryClick = { category ->
-//                    //TEST: use this for sql based categorisation
-//                    //navController.navigate("category-products/${category.id}")
-//
-//                    //After doing research - sql bases categorization almost equal but searching is slower in sql
-//                    //resarch on postman
-//                    //TEST: use this for meilisearch based categorization
-//                    navController.navigate(SearchRoute.Search.createRoute(category.name))
-//                }
-//            )
 
             CategoryStrip(
                 categories = categories,

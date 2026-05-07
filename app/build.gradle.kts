@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.sutonglabs.tracestore"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sutonglabs.tracestore"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -60,7 +60,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.annotation:annotation:1.8.0")
@@ -68,17 +67,17 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.8")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.compose.runtime:runtime")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.05.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.05.00"))
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("androidx.compose.material:material-icons-extended:1.6.7")
+    implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.ui:ui-text")
 
 
@@ -87,7 +86,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     //coil
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     //hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
@@ -120,10 +119,7 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:17.0.3")
 
     //Image preview grid
-    implementation("io.coil-kt:coil-compose:2.6.0")
-
     //SVG decoder
-    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("io.coil-kt:coil-svg:2.6.0")
 
 }

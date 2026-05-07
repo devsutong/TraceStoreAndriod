@@ -23,9 +23,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sutonglabs.tracestore.api.request_models.ReviewRequest
 import com.sutonglabs.tracestore.models.Product
 import com.sutonglabs.tracestore.viewmodels.ProductDetailViewModel
 import com.sutonglabs.tracestore.ui.common.ProductImageCarousel
+import com.sutonglabs.tracestore.ui.home_screen.components.review.ReviewInputSection
+import com.sutonglabs.tracestore.ui.home_screen.components.review.ReviewListSection
 
 /**
  * The main screen for displaying the details of a single product.
@@ -115,6 +118,26 @@ fun ProductDetailScreen(
                                     lineHeight = 24.sp
                                 )
 
+                                Spacer(modifier = Modifier.height(32.dp))
+
+                                // 📝 Review List Section
+                                ReviewListSection(reviews = state.reviews)
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                if (state.canReview) {
+                                    ReviewInputSection { rating, reviewText ->
+
+                                        val review = ReviewRequest(
+                                            productId = productId,
+                                            rating = rating,
+                                            reviewText = reviewText
+                                        )
+
+                                        viewModel.submitReview(context, review)
+                                    }
+                                }
+                                
                                 Spacer(modifier = Modifier.height(32.dp))
                             }
                         }
@@ -270,17 +293,21 @@ fun BlockchainStatusCard(isVerified: Boolean, onSyncClick: () -> Unit) {
 fun DetailBottomBar(price: String, onAddToCart: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shadowElevation = 8.dp,
-        color = MaterialTheme.colorScheme.surface
+        shadowElevation = 8.dp
     ) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
                 .navigationBarsPadding(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = "Total Price", style = MaterialTheme.typography.labelMedium)
+            Column {
+                Text(
+                    text = "Total Price",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 Text(
                     text = "₹$price",
                     style = MaterialTheme.typography.titleLarge,
@@ -291,27 +318,21 @@ fun DetailBottomBar(price: String, onAddToCart: () -> Unit) {
             Button(
                 onClick = onAddToCart,
                 modifier = Modifier
-                    .weight(1.5f)
-                    .height(56.dp),
+                    .height(50.dp)
+                    .width(200.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Icon(Icons.Default.ShoppingCart, contentDescription = "Add to cart icon")
+                Icon(Icons.Default.ShoppingCart, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("ADD TO CART", fontWeight = FontWeight.Bold)
+                Text("Add to Cart", fontWeight = FontWeight.Bold)
             }
         }
     }
 }
 
-/**
- * A composable to display an error message in the center of the screen.
- */
 @Composable
 fun ErrorView(message: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(Icons.Default.Error, contentDescription = "Error", tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(48.dp))
-            Text(text = message, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(16.dp))
-        }
+        Text(text = message, color = MaterialTheme.colorScheme.error)
     }
 }

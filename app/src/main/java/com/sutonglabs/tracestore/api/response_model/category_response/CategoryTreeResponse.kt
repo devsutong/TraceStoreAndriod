@@ -1,4 +1,4 @@
-package com.sutonglabs.tracestore.api.response_model
+package com.sutonglabs.tracestore.api.response_model.category_response
 
 import com.sutonglabs.tracestore.models.CategoryTree
 

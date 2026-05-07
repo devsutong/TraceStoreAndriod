@@ -2,7 +2,7 @@ package com.sutonglabs.tracestore.repository
 
 import android.util.Log
 import com.sutonglabs.tracestore.api.TraceStoreAPI
-import com.sutonglabs.tracestore.api.response_model.PincodeResponse
+import com.sutonglabs.tracestore.api.response_model.pincode_response.PincodeResponse
 import javax.inject.Inject
 
 class PincodeRepository @Inject constructor(

@@ -5,7 +5,7 @@ import com.sutonglabs.tracestore.api.request_models.forgot_password_mdels.Forgot
 import com.sutonglabs.tracestore.api.request_models.forgot_password_mdels.ResetPasswordRequest
 import com.sutonglabs.tracestore.api.request_models.forgot_password_mdels.VerifyOtpRequest
 import com.sutonglabs.tracestore.api.response_model.ApiResponse
-import com.sutonglabs.tracestore.api.response_model.VerifyOtpResponse
+import com.sutonglabs.tracestore.api.response_model.forgot_password_response.VerifyOtpResponse
 import com.sutonglabs.tracestore.services.AuthService
 import retrofit2.Response
 import javax.inject.Inject

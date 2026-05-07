@@ -14,8 +14,9 @@ data class OrdersResponse(
 data class Order(
     val id: Int,
     val userID: Int,
-    val totalAmount: Int,
+    val totalAmount: String,
     val addressID: Int,
+    val orderNumber: String,
     val status: String,
     val createdAt: String,
     val updatedAt: String,
@@ -30,7 +31,15 @@ data class OrderItem(
 data class Product(
     val id: Int,
     val name: String,
-    val image: String,
-    val price: Int
+    val price: Int,
+    val uuid: String? = null,
+    val Images: List<ProductImage>? = null
 )
 
+data class ProductImage(
+    val id: Int,
+    val uuid: String,
+    val position: Int,
+    val extension: String,
+    val imageUrl: String
+)

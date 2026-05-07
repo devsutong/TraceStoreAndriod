@@ -3,6 +3,7 @@ package com.sutonglabs.tracestore.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sutonglabs.tracestore.api.response_model.*
+import com.sutonglabs.tracestore.api.response_model.forgot_password_response.VerifyOtpResponse
 import com.sutonglabs.tracestore.repository.ForgotPasswordRespository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

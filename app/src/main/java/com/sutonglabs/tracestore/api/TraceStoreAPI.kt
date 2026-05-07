@@ -7,17 +7,17 @@ import com.sutonglabs.tracestore.api.request_models.CreateAddressRequest
 import com.sutonglabs.tracestore.api.request_models.CreateOrderRequest
 import com.sutonglabs.tracestore.api.request_models.UpdateAddressRequest
 import com.sutonglabs.tracestore.api.request_models.UpdateUserRequest
-import com.sutonglabs.tracestore.api.response_model.CategoryTreeResponse
+import com.sutonglabs.tracestore.api.response_model.category_response.CategoryTreeResponse
 import com.sutonglabs.tracestore.api.response_model.CreateAddressResponse
 import com.sutonglabs.tracestore.api.response_model.CreateOrderResponse
 import com.sutonglabs.tracestore.api.response_model.OrdersResponse
-import com.sutonglabs.tracestore.api.response_model.PincodeResponse
+import com.sutonglabs.tracestore.api.response_model.pincode_response.PincodeResponse
 import com.sutonglabs.tracestore.api.response_model.UpdateAddressResponse
 import com.sutonglabs.tracestore.models.AddToCartRequest
 import com.sutonglabs.tracestore.models.AddressResponse
 import com.sutonglabs.tracestore.models.ProductResponse
 import com.sutonglabs.tracestore.models.ProductDetailResponse
-import com.sutonglabs.tracestore.api.response_model.SearchResponse
+import com.sutonglabs.tracestore.api.response_model.search_response.SearchResponse
 import com.sutonglabs.tracestore.models.assets.AssetVerificationResult
 import retrofit2.Response
 import retrofit2.Call
@@ -155,13 +155,6 @@ interface TraceStoreAPI {
 
     @GET("category/tree")
     suspend fun getCategories(): Response<CategoryTreeResponse>
-
-    @GET("search")
-    suspend fun searchProducts(
-        @Query("q") query: String,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
-    ): SearchResponse
 
     @GET("product/")
     suspend fun getProductsByCategory(

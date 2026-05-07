@@ -96,6 +96,9 @@ fun OrderCard(order: Order) {
 
 @Composable
 fun OrderItemRow(item: OrderItem) {
+    val imageUrl = item.Product.Images?.firstOrNull()?.imageUrl
+    val fullImageUrl = if (imageUrl != null) "${Constants.BASE_URL}$imageUrl" else ""
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,9 +109,8 @@ fun OrderItemRow(item: OrderItem) {
             modifier = Modifier.padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            //todo: make it reusable
             AsyncImage(
-                model = item.Product.image,
+                model = fullImageUrl,
                 contentDescription = item.Product.name,
                 modifier = Modifier
                     .size(80.dp),

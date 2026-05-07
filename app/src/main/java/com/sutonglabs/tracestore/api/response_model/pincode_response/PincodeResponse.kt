@@ -1,4 +1,4 @@
-package com.sutonglabs.tracestore.api.response_model
+package com.sutonglabs.tracestore.api.response_model.pincode_response
 
 data class PincodeResponse(
     val success: Boolean,
